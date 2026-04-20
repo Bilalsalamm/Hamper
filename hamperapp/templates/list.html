@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gifts & Hampers | Premium Delivery</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .hero-section {
+            background: #f8f9fa;
+            padding: 60px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .card-img-top {
+            height: 250px;
+            object-fit: cover;
+        }
+        .hamper-card {
+            transition: transform 0.3s;
+        }
+        .hamper-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">🎁 HamperWorld</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/admin">Admin Login</a></li>
+                    <li class="nav-item"><a class="nav-link btn btn-warning text-dark ms-lg-2" href="#">🛒 Cart (0)</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero-section text-center">
+        <div class="container">
+            <h1 class="display-4 fw-bold">Curated Hampers for Every Occasion</h1>
+            <p class="lead">Hand-picked luxury gifts delivered straight to their door.</p>
+            <a href="#shop" class="btn btn-primary btn-lg">Browse Collections</a>
+        </div>
+    </header>
+
+    <main class="container my-5" id="shop">
+        <h2 class="mb-4">Our Best Sellers</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            
+            {% for hamper in hampers %}
+            <div class="col">
+                <div class="card h-100 hamper-card">
+                    <img src="{{ hamper.image_url|default:'https://via.placeholder.com/300x250?text=No+Image' }}" class="card-img-top" alt="{{ hamper.title }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ hamper.title }}</h5>
+                        <p class="card-text text-muted">{{ hamper.description|truncatewords:15 }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="h5 mb-0">${{ hamper.price }}</span>
+                           <a href="{% url 'hamper_detail' hamper.pk %}" class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="alert alert-info">We are currently restocking! Check back soon.</p>
+            </div>
+            {% endfor %}
+
+        </div>
+    </main>
+
+    <footer class="bg-light py-4 mt-5 border-top">
+        <div class="container text-center">
+            <p class="text-muted mb-0">&copy; 2026 HamperWorld Marketplace. Built with Django.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
