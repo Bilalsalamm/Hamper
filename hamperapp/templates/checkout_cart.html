@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Checkout | HamperWorld</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        /* Navbar */
+        .navbar-custom {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            padding: 14px 0;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.25);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-brand-text {
+            font-weight: 800;
+            font-size: 24px;
+            color: white !important;
+            letter-spacing: 1.5px;
+            text-decoration: none;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: white;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .page-header h1 {
+            color: #1a1a2e;
+            font-weight: 800;
+            font-size: 32px;
+            margin: 0;
+        }
+
+        /* Main Container */
+        .checkout-container {
+            max-width: 1200px;
+        }
+
+        .row-checkout {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 30px;
+        }
+
+        /* Checkout Card */
+        .checkout-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.08);
+            padding: 40px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .checkout-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 56px rgba(0, 0, 0, 0.12);
+        }
+
+        .checkout-card h2 {
+            color: #1a1a2e;
+            font-weight: 700;
+            font-size: 22px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkout-card h2 i {
+            color: #667eea;
+            font-size: 26px;
+        }
+
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 13px;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid #e8ecf1;
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            color: #2c3e50;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            outline: none;
+        }
+
+        .form-control::placeholder {
+            color: #bdc3c7;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        /* Section Divider */
+        .section-divider {
+            border: none;
+            border-top: 2px solid #e8ecf1;
+            margin: 30px 0;
+        }
+
+        /* Order Summary */
+        .order-summary {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            position: sticky;
+            top: 100px;
+        }
+
+        .order-summary h3 {
+            color: #1a1a2e;
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .order-summary h3 i {
+            color: #667eea;
+            font-size: 20px;
+        }
+
+        .cart-item-checkout {
+            background: #f8f9fb;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .item-name {
+            color: #2c3e50;
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .item-qty {
+            color: #7f8c8d;
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+
+        .item-price-checkout {
+            color: #667eea;
+            font-weight: 800;
+            font-size: 16px;
+        }
+
+        .summary-divider {
+            border-top: 2px solid #e8ecf1;
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #2c3e50;
+        }
+
+        .summary-row.total {
+            font-weight: 700;
+            font-size: 16px;
+            color: #1a1a2e;
+            border-top: 2px solid #e8ecf1;
+            padding-top: 12px;
+            margin-top: 12px;
+        }
+
+        .summary-row span:last-child {
+            font-weight: 600;
+        }
+
+        .summary-row.shipping .status {
+            color: #27ae60;
+            font-weight: 700;
+        }
+
+        /* Buttons */
+        .btn-place-order {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 700;
+            padding: 14px 24px;
+            font-size: 16px;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.2);
+            margin-top: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-place-order:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(102, 126, 234, 0.3);
+            color: white;
+            background: linear-gradient(90deg, #764ba2 0%, #667eea 100%);
+        }
+
+        .btn-place-order:active {
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .row-checkout {
+                grid-template-columns: 1fr;
+            }
+
+            .order-summary {
+                position: static;
+                order: -1;
+            }
+
+            .checkout-card {
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header h1 {
+                font-size: 24px;
+            }
+
+            .checkout-card {
+                padding: 20px;
+            }
+        }
+
+        .required-field::after {
+            content: " *";
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-custom">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand-text" href="{% url 'hamper_list' %}">🎁 HamperWorld</a>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <div class="container-fluid px-4">
+            <h1><i class="fas fa-credit-card"></i> Checkout</h1>
+        </div>
+    </div>
+
+    <div class="container-fluid px-4 checkout-container">
+        <div class="row-checkout">
+            <div class="checkout-card">
+                <h2><i class="fas fa-map-marker-alt"></i> Shipping Address</h2>
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <!-- Personal Information -->
+                    <div class="form-group">
+                        <label for="full_name" class="form-label required-field">Full Name</label>
+                        <input type="text" class="form-control" id="full_name" name="full_name" placeholder="John Doe" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="form-label required-field">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="john@example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone" class="form-label required-field">Phone Number</label>
+                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="+91 98765 43210">
+                    </div>
+
+                    <hr class="section-divider">
+
+                    <!-- Location Selection -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="country" class="form-label required-field">Country</label>
+                            <select class="form-select" id="country" name="country" required onchange="updateStates()">
+                                <option value="">-- Select Country --</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="state" class="form-label required-field">State / Province</label>
+                            <select class="form-select" id="state" name="state" required onchange="updateCities()">
+                                <option value="">-- Select State --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city" class="form-label required-field">City</label>
+                            <select class="form-select" id="city" name="city" required>
+                                <option value="">-- Select City --</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="postal_code" class="form-label required-field">Postal Code / ZIP</label>
+                            <input type="text" class="form-control" id="postal_code" name="postal_code" placeholder="110001" required>
+                        </div>
+                    </div>
+
+                    <hr class="section-divider">
+
+                    <!-- Street Address -->
+                    <div class="form-group form-row full">
+                        <div class="form-group">
+                            <label for="address" class="form-label required-field">Street Address</label>
+                            <input type="text" class="form-control" id="address" name="address" placeholder="123 Main Street, Apt 4B" required>
+                        </div>
+                    </div>
+
+                    <button class="btn-place-order" type="submit">
+                        <i class="fas fa-lock"></i> Place Order Securely
+                    </button>
+                </form>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="order-summary">
+                <h3><i class="fas fa-receipt"></i> Order Summary</h3>
+
+                {% for item in cart_items %}
+                <div class="cart-item-checkout">
+                    <div class="item-name">{{ item.name }}</div>
+                    <div class="item-qty">Qty: <strong>{{ item.quantity }}</strong></div>
+                    <div class="item-price-checkout">₹{{ item.total|floatformat:2 }}</div>
+                </div>
+                {% endfor %}
+
+                <div class="summary-divider">
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span>₹{{ total|floatformat:2 }}</span>
+                    </div>
+                    <div class="summary-row shipping">
+                        <span>Shipping</span>
+                        <span class="status">FREE</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Tax</span>
+                        <span>₹0.00</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total Amount</span>
+                        <span>₹{{ total|floatformat:2 }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get countries from Django backend
+        const countriesData = {{ countries|safe }};
+        
+        // Initialize countries dropdown on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const countrySelect = document.getElementById('country');
+            countriesData.forEach(([code, name]) => {
+                const option = document.createElement('option');
+                option.value = code;
+                option.textContent = name;
+                countrySelect.appendChild(option);
+            });
+        });
+
+        // Cities data organized by country and state (can be expanded)
+        const citiesData = {
+            IN: {
+                DL: ['New Delhi', 'Delhi Cantt', 'Dwarka'],
+                MH: ['Mumbai', 'Pune', 'Nagpur', 'Aurangabad', 'Nashik'],
+                KA: ['Bangalore', 'Mysore', 'Mangalore', 'Belagavi', 'Hubballi'],
+                TN: ['Chennai', 'Coimbatore', 'Madurai', 'Salem', 'Trichy'],
+                GJ: ['Ahmedabad', 'Surat', 'Vadodara', 'Rajkot', 'Junagadh'],
+                UP: ['Lucknow', 'Kanpur', 'Varanasi', 'Agra', 'Meerut'],
+                AP: ['Hyderabad', 'Visakhapatnam', 'Vijayawada', 'Tirupati'],
+                WB: ['Kolkata', 'Darjeeling', 'Asansol', 'Siliguri'],
+                TG: ['Hyderabad', 'Warangal', 'Nizamabad'],
+                RJ: ['Jaipur', 'Jodhpur', 'Udaipur', 'Kota', 'Ajmer'],
+                MP: ['Bhopal', 'Indore', 'Jabalpur', 'Gwalior', 'Ujjain'],
+                OP: ['Bhubaneswar', 'Rourkela', 'Cuttack', 'Sambalpur'],
+                JH: ['Ranchi', 'Jamshedpur', 'Dhanbad', 'Giridih'],
+                BR: ['Patna', 'Gaya', 'Bhagalpur', 'Muzaffarpur'],
+                PB: ['Chandigarh', 'Amritsar', 'Ludhiana', 'Jalandhar'],
+                HR: ['Gurugram', 'Faridabad', 'Hisar', 'Rohtak'],
+                HP: ['Shimla', 'Mandi', 'Solan', 'Kangra'],
+                UT: ['Dehradun', 'Haridwar', 'Nainital', 'Rishikesh'],
+                KL: ['Kochi', 'Thiruvananthapuram', 'Kozhikode', 'Kottayam'],
+                GA: ['Panaji', 'Margao', 'Vasco da Gama'],
+                AS: ['Guwahati', 'Silchar', 'Dibrugarh', 'Nagaon'],
+            },
+            US: {
+                CA: ['Los Angeles', 'San Francisco', 'San Diego', 'Sacramento'],
+                NY: ['New York', 'Buffalo', 'Rochester', 'Albany'],
+                TX: ['Houston', 'Dallas', 'Austin', 'San Antonio'],
+                FL: ['Miami', 'Orlando', 'Tampa', 'Jacksonville'],
+                IL: ['Chicago', 'Springfield'],
+            },
+            GB: {
+                ENG: ['London', 'Manchester', 'Birmingham', 'Bristol'],
+                SCT: ['Edinburgh', 'Glasgow', 'Aberdeen'],
+                WLS: ['Cardiff', 'Swansea'],
+            },
+        };
+
+        // State codes mapping (for major countries)
+        const stateCodesMap = {
+            IN: {
+                DL: 'Delhi',
+                MH: 'Maharashtra',
+                KA: 'Karnataka',
+                TN: 'Tamil Nadu',
+                GJ: 'Gujarat',
+                UP: 'Uttar Pradesh',
+                AP: 'Andhra Pradesh',
+                WB: 'West Bengal',
+                TG: 'Telangana',
+                RJ: 'Rajasthan',
+                MP: 'Madhya Pradesh',
+                OP: 'Odisha',
+                JH: 'Jharkhand',
+                BR: 'Bihar',
+                PB: 'Punjab',
+                HR: 'Haryana',
+                HP: 'Himachal Pradesh',
+                UT: 'Uttarakhand',
+                KL: 'Kerala',
+                GA: 'Goa',
+                AS: 'Assam',
+            },
+            US: {
+                CA: 'California',
+                NY: 'New York',
+                TX: 'Texas',
+                FL: 'Florida',
+                IL: 'Illinois',
+            },
+            GB: {
+                ENG: 'England',
+                SCT: 'Scotland',
+                WLS: 'Wales',
+            },
+        };
+
+        function updateStates() {
+            const country = document.getElementById('country').value;
+            const stateSelect = document.getElementById('state');
+            const citySelect = document.getElementById('city');
+
+            stateSelect.innerHTML = '<option value="">-- Select State/Province --</option>';
+            citySelect.innerHTML = '<option value="">-- Select City --</option>';
+
+            // Show state if we have codes for this country
+            if (country && stateCodesMap[country]) {
+                const states = stateCodesMap[country];
+                for (const [code, name] of Object.entries(states)) {
+                    const option = document.createElement('option');
+                    option.value = code;
+                    option.textContent = name;
+                    stateSelect.appendChild(option);
+                }
+            } else {
+                // For countries without predefined states, disable state field
+                stateSelect.disabled = true;
+            }
+        }
+
+        function updateCities() {
+            const country = document.getElementById('country').value;
+            const state = document.getElementById('state').value;
+            const citySelect = document.getElementById('city');
+
+            citySelect.innerHTML = '<option value="">-- Select City --</option>';
+
+            if (country && state && citiesData[country] && citiesData[country][state]) {
+                const cities = citiesData[country][state];
+                cities.forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
+            } else {
+                // Allow manual city entry for countries without predefined cities
+                citySelect.disabled = false;
+            }
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

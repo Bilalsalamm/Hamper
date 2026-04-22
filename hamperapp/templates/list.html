@@ -3,83 +3,789 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gifts & Hampers | Premium Delivery</title>
+    <title>Hamper Shop | Premium Gift Hampers</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .hero-section {
-            background: #f8f9fa;
-            padding: 60px 0;
-            border-bottom: 1px solid #dee2e6;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .card-img-top {
-            height: 250px;
-            object-fit: cover;
+        
+        body { 
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .hamper-card {
-            transition: transform 0.3s;
+        
+        /* Navbar */
+        .navbar-custom { 
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            padding: 14px 0;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.25);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        .hamper-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        
+        .navbar-brand-text { 
+            font-weight: 800; 
+            font-size: 28px; 
+            color: white !important;
+            letter-spacing: 1.5px;
+            transition: all 0.3s;
+            background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
         }
+        
+        .navbar-brand-text:hover {
+            transform: scale(1.08);
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+        }
+        
+        .logo-svg {
+            width: 40px;
+            height: 40px;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .navbar-brand-text:hover .logo-svg {
+            transform: rotateY(360deg) scale(1.1);
+        }
+        
+        .logo-svg-gift {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .navbar-brand-text:hover .logo-svg-gift {
+            animation: bounce 0.6s ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            25% { transform: translateY(-15px); }
+            50% { transform: translateY(-25px); }
+            75% { transform: translateY(-15px); }
+        }
+        
+        .logo-text-brand {
+            background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .navbar-nav-custom { 
+            display: flex; 
+            gap: 20px; 
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-link-custom { 
+            color: white !important; 
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 6px 12px;
+            border-radius: 6px;
+        }
+        
+        .nav-link-custom:hover { 
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .btn-logout {
+            background-color: rgba(255, 255, 255, 0.25);
+            border: 2px solid white;
+            color: white;
+            border-radius: 20px;
+            padding: 6px 18px;
+            font-weight: 700;
+            transition: all 0.3s;
+            font-size: 13px;
+        }
+        
+        .btn-logout:hover {
+            background-color: white;
+            color: #667eea;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .cart-icon { 
+            color: white; 
+            font-size: 24px; 
+            cursor: pointer; 
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .cart-icon:hover { 
+            transform: scale(1.15) rotate(10deg);
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+        }
+        
+        .cart-count { 
+            background: white;
+            color: #667eea; 
+            border-radius: 50%; 
+            width: 28px; 
+            height: 28px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 11px; 
+            font-weight: 900; 
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Hero Section */
+        /* --- New Image Banner Styles --- */
+.hero-ad-container {
+    position: relative;
+    width: 100%;
+    height: 450px; /* Adjust height as needed */
+    overflow: hidden;
+    margin-bottom: 60px;
+    background-color: #000; /* Fallback color */
+}
+
+.hero-ad-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* This makes it look like a professional ad */
+    transition: transform 0.5s ease;
+}
+
+.hero-ad-container:hover .hero-ad-image {
+    transform: scale(1.03); /* Subtle zoom on hover */
+}
+
+.hero-ad-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3); /* Darken image slightly so text is readable */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+/* --- Carousel Styling --- */
+.hero-img {
+    height: 500px; /* Force a consistent height */
+    object-fit: cover; /* Prevents stretching */
+    filter: brightness(0.7); /* Darkens image so white text stands out */
+}
+
+.carousel-caption {
+    bottom: 20%; /* Moves the text slightly higher */
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.5); /* Makes text pop */
+}
+
+/* Smooth fade transition instead of sliding */
+.carousel-fade .carousel-item {
+    transition-duration: 0.8s;
+}
+
+/* Make it responsive for mobile */
+@media (max-width: 768px) {
+    .hero-ad-container { height: 300px; }
+    .hero-ad-overlay h1 { font-size: 28px; }
+}
+        /* Features Section - Smaller Tab Style */
+        .features-section {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
+            padding: 25px 0;
+            margin-bottom: 60px;
+            border-top: 2px solid #667eea;
+            border-bottom: 2px solid #667eea;
+        }
+        
+        .feature-item {
+            text-align: center;
+            padding: 15px 20px;
+            transition: all 0.3s;
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-4px);
+        }
+        
+        .feature-icon {
+            font-size: 28px;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+        
+        .feature-item h5 {
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #1a1a2e;
+            font-size: 13px;
+        }
+        
+        .feature-item p {
+            font-size: 12px;
+            color: #666;
+            margin: 0;
+        }
+        
+        /* Section Title */
+        .section-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: #1a1a2e;
+            margin-bottom: 50px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+        }
+        
+        /* Product Grid */
+        .products-container { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); 
+            gap: 28px; 
+            margin-bottom: 60px;
+        }
+        
+        /* Hamper Card */
+        .hamper-card { 
+            background: white; 
+            border-radius: 12px; 
+            padding: 0;
+            overflow: hidden;
+            height: 100%;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+        }
+        
+        .hamper-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+            z-index: 2;
+        }
+        
+        .hamper-card:hover::before {
+            left: 100%;
+        }
+        
+        .hamper-card:hover { 
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.15);
+            transform: translateY(-8px);
+        }
+        
+        .card-img-container {
+            position: relative;
+            height: 240px;
+            overflow: hidden;
+            background: #f0f0f0;
+        }
+        
+        .card-img-top { 
+            height: 100%;
+            width: 100%;
+            object-fit: cover; 
+            transition: transform 0.4s;
+        }
+        
+        .hamper-card:hover .card-img-top {
+            transform: scale(1.08);
+        }
+        
+        .card-content {
+            padding: 20px;
+        }
+        
+        .product-name { 
+            font-size: 16px; 
+            font-weight: 700; 
+            color: #1a1a2e; 
+            margin-bottom: 10px; 
+            min-height: 45px;
+            line-height: 1.4;
+        }
+        
+        .product-rating {
+            color: #ffc107;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+        
+        .product-price { 
+            font-size: 24px; 
+            color: #667eea;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+        
+        .btn-view { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            padding: 10px 16px; 
+            width: 100%; 
+            font-weight: 700;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .btn-view:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+        
+        /* Footer */
+        .footer-custom { 
+            background: linear-gradient(90deg, #1a1a2e 0%, #16213e 100%);
+            color: white; 
+            padding: 50px 0 20px;
+            margin-top: 60px;
+        }
+        
+        .footer-section h5 {
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #ff6b35;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer-section li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-section a {
+            color: #b0b0b0;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .footer-section a:hover {
+            color: #ff6b35;
+            padding-left: 5px;
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 30px;
+            text-align: center;
+            color: #b0b0b0;
+            font-size: 14px;
+        }
+        
+        /* No Products Alert */
+        .alert-custom {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border: 1px solid #667eea;
+            color: #445;
+            border-radius: 12px;
+        }
+        
+        /* Images Loading */
+        img { 
+            background-color: #e9ecef; 
+            animation: shimmer 2s infinite; 
+        }
+        
+        @keyframes shimmer { 
+            0% { background-color: #e9ecef; } 
+            50% { background-color: #f0f0f0; } 
+            100% { background-color: #e9ecef; } 
+        }
+        
+        /* Container Padding */
+        .container {
+            max-width: 1200px;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-banner h1 {
+                font-size: 32px;
+            }
+            
+            .hero-banner p {
+                font-size: 16px;
+            }
+            
+            .products-container {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                gap: 16px;
+            }
+            
+            .section-title {
+                font-size: 28px;
+                margin-bottom: 30px;
+            }
+            
+            .navbar-nav-custom {
+                gap: 15px;
+            }
+        }
+/* --- Updated Borderless KitKat Navbar --- */
+.navbar-custom { 
+    background: #e61e2a  !important; /* The KitKat Red */
+    padding: 8px 0;
+    /* REMOVED border-bottom for a cleaner look */
+    border-bottom: none !important; 
+    /* Softened shadow to define the edge without a line */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); 
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar-brand-text {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.navbar-brand-text:hover {
+    transform: scale(1.08);
+}
+
+/* The White Oval Badge (Borderless) */.kitkat-logo-badge-nav {
+    font-family: 'Oswald', sans-serif !important;
+    
+    /* 1. UPDATE THESE TO CHANGE TEXT COLOR */
+    background-color: white !important; 
+    
+    /* Option A: KitKat Red (Standard) -> #e61e2a */
+    /* Option B: Premium Gold -> #ffd700 */
+    /* Option C: Chocolate Dark -> #4a0404 */
+    
+    color: #000000 !important; /* Change this */
+    -webkit-text-fill-color: #0e0e0e !important; /* YOU MUST CHANGE THIS TOO */
+    
+    /* 2. POSITIONING */
+    display: inline-block !important;
+    position: relative !important;
+    z-index: 10 !important;
+    
+    /* 3. STYLE */
+    padding: 5px 22px !important;
+    border-radius: 50px !important;
+    text-transform: uppercase !important;
+    font-weight: 500 !important;
+    font-size: 10px !important;
+    transform: skew(-10deg) !important;
+    box-shadow: 2px 2px 0px #8b0000 !important;
+}
+    
+    /* 4. THE KITKAT TILT */
+    transform: skew(-10deg) !important;
+    box-shadow: 3px 3px 0px #8b0000 !important;
+    
+    /* 5. REMOVE ANY OVERFLOW ISSUES */
+    text-decoration: none !important;
+    overflow: visible !important;
+}
+
+.logo-text-brand {
+    -webkit-text-fill-color: rgb(0, 0, 0) !important;
+    color: white !important;
+    font-weight: 800;
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
+/* Nav Links & Icons */
+.nav-link-custom {
+    color: white !important;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1px;
+    padding: 8px 12px;
+    text-transform: uppercase;
+}
+
+.cart-icon {
+    font-size: 22px;
+    position: relative;
+    margin-right: 15px;
+    filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2));
+}
+
+.cart-count {
+    background: white !important;
+    color: #e61e2a !important;
+    font-weight: 900;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    font-size: 10px;
+    top: -10px;
+    right: -10px;
+    border: none !important; /* No border on count badge */
+}
+
+/* Red Edition Logout Button (Borderless) */
+.btn-logout-kitkat {
+    background: white;
+    color: #e61e2a;
+    border: none !important; /* Force border removal */
+    border-radius: 50px;
+    padding: 8px 20px;
+    font-weight: 800;
+    font-size: 12px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    /* Removed the hard grey box-shadow for a cleaner lift effect */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-logout-kitkat:hover {
+    background: #fdfaf0; /* Wafer Cream */
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+        
     </style>
 </head>
 <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-custom sticky-top">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand-text" href="{% url 'hamper_list' %}">
+            <div class="kitkat-logo-badge-nav">Hamper World</div>
+            
+        </a>
+        
+        <div class="navbar-nav-custom ms-auto">
+            {% if user.is_authenticated %}
+                <a href="{% url 'cart_summary' %}" class="cart-icon" style="text-decoration: none;">
+                    🛒
+                    {% if cart_items_count > 0 %}
+                        <span class="cart-count">{{ cart_items_count }}</span>
+                    {% endif %}
+                </a>
+            
+                <a href="{% url 'order_history' %}" class="nav-link-custom" style="text-decoration: none;">
+                    📜 MY ORDERS
+                </a>
+                
+                <span class="nav-link-custom d-none d-md-inline">👤 {{ user.username|upper }}</span>
+                
+                <form action="{% url 'logout' %}" method="post" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-logout-kitkat">LOGOUT</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}" class="nav-link-custom">👤 LOGIN</a>
+                <a href="{% url 'cart_summary' %}" class="cart-icon" style="text-decoration: none;">🛒</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">🎁 HamperWorld</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/admin">Admin Login</a></li>
-                    <li class="nav-item"><a class="nav-link btn btn-warning text-dark ms-lg-2" href="#">🛒 Cart (0)</a></li>
-                </ul>
+{% load static %}
+
+<div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+    </div>
+
+    <div class="carousel-inner">
+        <div class="carousel-item active" data-bs-interval="5000">
+            <img src="{% static 'images/ban1.png' %}" class="d-block w-100 hero-img" alt="Luxury Hampers">
+            <div class="carousel-caption">
+                <h1 class="display-4 fw-bold">Curated Premium Hampers</h1>
+                <p>Handpicked luxury for every occasion.</p>
             </div>
         </div>
-    </nav>
 
-    <header class="hero-section text-center">
-        <div class="container">
-            <h1 class="display-4 fw-bold">Curated Hampers for Every Occasion</h1>
-            <p class="lead">Hand-picked luxury gifts delivered straight to their door.</p>
-            <a href="#shop" class="btn btn-primary btn-lg">Browse Collections</a>
+        <div class="carousel-item" data-bs-interval="5000">
+            <img src="{% static 'images/ban2.png' %}" class="d-block w-100 hero-img" alt="Special Sale">
+            <div class="carousel-caption">
+                <h1 class="display-4 fw-bold">Exclusive Summer Sale</h1>
+                <p>Get 20% off on your first order. Use code: JOY20</p>
+            </div>
         </div>
-    </header>
 
-    <main class="container my-5" id="shop">
-        <h2 class="mb-4">Our Best Sellers</h2>
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            
-            {% for hamper in hampers %}
-            <div class="col">
-                <div class="card h-100 hamper-card">
-                    <img src="{{ hamper.image_url|default:'https://via.placeholder.com/300x250?text=No+Image' }}" class="card-img-top" alt="{{ hamper.title }}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ hamper.title }}</h5>
-                        <p class="card-text text-muted">{{ hamper.description|truncatewords:15 }}</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="h5 mb-0">${{ hamper.price }}</span>
-                           <a href="{% url 'hamper_detail' hamper.pk %}" class="btn btn-primary">View Details</a>
+        <div class="carousel-item" data-bs-interval="5000">
+            <img src="{% static 'images/ban3.png' %}" class="d-block w-100 hero-img" alt="New Arrivals">
+            <div class="carousel-caption">
+                <h1 class="display-4 fw-bold">New Exotic Arrivals</h1>
+                <p>Explore our fresh collection of imported treats.</p>
+            </div>
+        </div>
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
+</div>
+
+    <!-- Products Section -->
+    <div class="container mb-5" id="products-section">
+        <h2 class="section-title">Our Best Sellers</h2>
+        
+        {% if hampers %}
+            <div class="products-container">
+                {% for hamper in hampers %}
+                <div class="hamper-card">
+                    <div class="card-img-container">
+                        <img src="{% if hamper.image %}{{ hamper.image.url }}{% else %}https://via.placeholder.com/240x240?text=Premium+Hamper{% endif %}" 
+                             class="card-img-top" alt="{{ hamper.name }}" loading="lazy" decoding="async">
+                    </div>
+                    <div class="card-content">
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span style="margin-left: 5px; color: #666;">(128)</span>
+                        </div>
+                        <h6 class="product-name">{{ hamper.name }}</h6>
+                        <p class="product-price">₹{{ hamper.price }}</p>
+                        <a href="{% url 'hamper_detail' hamper.pk %}" class="btn-view">View Details</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-custom alert-info">
+                <i class="fas fa-info-circle"></i> No hampers available at the moment. Please check back soon!
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Features Section - Below Products -->
+    <div class="features-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fas fa-truck"></i></div>
+                        <h5>Free Shipping</h5>
+                        <p>On orders over ₹2500</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fas fa-lock"></i></div>
+                        <h5>Secure Payment</h5>
+                        <p>100% safe transactions</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fas fa-redo"></i></div>
+                        <h5>Easy Returns</h5>
+                        <p>30-day return policy</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-custom">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-md-3">
+                    <div class="footer-section">
+                        <h5>About Us</h5>
+                        <p style="font-size: 14px; color: #b0b0b0; line-height: 1.6;">
+                            HamperWorld brings curated premium hampers for all your gifting needs. Quality, elegance, and joy in every box.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="footer-section">
+                        <h5>Quick Links</h5>
+                        <ul>
+                            <li><a href="{% url 'hamper_list' %}">Home</a></li>
+                            <li><a href="#shop">Shop</a></li>
+                            <li><a href="#about">About</a></li>
+                            <li><a href="#contact">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="footer-section">
+                        <h5>Support</h5>
+                        <ul>
+                            <li><a href="#faq">FAQ</a></li>
+                            <li><a href="#shipping">Shipping Info</a></li>
+                            <li><a href="#returns">Returns</a></li>
+                            <li><a href="#contact">Customer Service</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="footer-section">
+                        <h5>Follow Us</h5>
+                        <div style="font-size: 24px; display: flex; gap: 15px;">
+                            <a href="#" style="color: #667eea;"><i class="fab fa-facebook"></i></a>
+                            <a href="#" style="color: #667eea;"><i class="fab fa-twitter"></i></a>
+                            <a href="#" style="color: #667eea;"><i class="fab fa-instagram"></i></a>
+                            <a href="#" style="color: #667eea;"><i class="fab fa-linkedin"></i></a>
                         </div>
                     </div>
                 </div>
             </div>
-            {% empty %}
-            <div class="col-12 text-center">
-                <p class="alert alert-info">We are currently restocking! Check back soon.</p>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 HamperWorld. All rights reserved. | <a href="#" style="color: #b0b0b0;">Privacy Policy</a> | <a href="#" style="color: #b0b0b0;">Terms & Conditions</a></p>
             </div>
-            {% endfor %}
-
-        </div>
-    </main>
-
-    <footer class="bg-light py-4 mt-5 border-top">
-        <div class="container text-center">
-            <p class="text-muted mb-0">&copy; 2026 HamperWorld Marketplace. Built with Django.</p>
         </div>
     </footer>
 

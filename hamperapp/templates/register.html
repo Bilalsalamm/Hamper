@@ -2,47 +2,212 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sign Up | HamperWorld Red Edition</title>
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        body { background: #f4f7f6; }
-        .register-card { max-width: 450px; margin-top: 50px; border: none; border-radius: 15px; }
-        .btn-amazon { background: #f0c14b; border-color: #a88734; color: #111; }
-        .btn-amazon:hover { background: #f4d078; }
+        :root {
+            --kitkat-red: #e61e2a;
+            --kitkat-dark: #8b0000;
+            --wafer-cream: #fdfaf0;
+            --gold-shine: #ffd700;
+        }
+
+        body { 
+            /* Deep Chocolate/Red Gradient Background */
+            background: radial-gradient(circle at center, #b21821 0%, #4a0404 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-x: hidden;
+        }
+
+        /* --- Full Red Premium Card --- */
+        .register-card { 
+            background: var(--kitkat-red);
+            padding: 45px 35px; 
+            /* Signature Premium Asymmetric Curve */
+            border-radius: 80px 20px 80px 20px; 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,255,255,0.2); 
+            max-width: 450px; 
+            width: 100%; 
+            position: relative;
+            border: 3px solid rgba(255,255,255,0.3);
+            animation: snapIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        @keyframes snapIn {
+            0% { transform: scale(0.8) rotate(-3deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        /* Glossy "Wrapper" Reflection */
+        .register-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 50%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.15), transparent);
+            pointer-events: none;
+        }
+
+        .brand-header { text-align: center; margin-bottom: 30px; position: relative; z-index: 2; }
+
+        .kitkat-logo {
+            font-family: 'Oswald', sans-serif;
+            background: white;
+            color: var(--kitkat-red);
+            padding: 8px 35px;
+            font-size: 28px;
+            display: inline-block;
+            border-radius: 100px; 
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transform: skew(-10deg);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .motto {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            color: var(--wafer-cream);
+            margin-top: 15px;
+            text-transform: uppercase;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .form-label { 
+            font-size: 11px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: 1.5px;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            padding-left: 15px;
+        }
+
+        /* High-Contrast Wafer Inputs */
+        input[type="text"], input[type="email"], input[type="password"] {
+            width: 100% !important;
+            border-radius: 50px !important;
+            border: 2px solid transparent !important;
+            padding: 12px 25px !important;
+            font-size: 16px !important; /* Prevents mobile zoom bug */
+            background: var(--wafer-cream) !important;
+            color: var(--kitkat-dark) !important;
+            transition: 0.3s;
+            box-sizing: border-box;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        input:focus { 
+            border-color: white !important; 
+            box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.2) !important; 
+            outline: none;
+        }
+
+        .help-text { font-size: 10px; color: rgba(255,255,255,0.7); padding-left: 15px; margin-top: 4px; }
+
+        /* The "Break" Button (White on Red) */
+        .btn-register { 
+            background: white;
+            border: none; 
+            color: var(--kitkat-red); 
+            font-family: 'Oswald', sans-serif;
+            font-size: 20px;
+            padding: 15px; 
+            border-radius: 50px;
+            width: 100%; 
+            margin-top: 15px;
+            text-transform: uppercase;
+            transition: 0.3s;
+            position: relative;
+            z-index: 2;
+            font-weight: 700;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .btn-register:hover { 
+            background: var(--wafer-cream);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        }
+
+        .btn-register:active { transform: scale(0.96); }
+
+        .login-link { text-align: center; margin-top: 25px; font-size: 14px; position: relative; z-index: 2; }
+        .login-link a { color: white; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+
+        .error-text { color: var(--gold-shine); font-size: 11px; font-weight: 700; padding-left: 15px; }
+
+        /* Mobile Optimization */
+        @media (max-width: 480px) {
+            .register-card { padding: 40px 20px; border-radius: 60px 20px; }
+            .kitkat-logo { font-size: 24px; }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="card shadow register-card p-4">
-                <div class="text-center mb-4">
-                    <h2 class="fw-bold">Create Account</h2>
-                    <p class="text-muted">Start your hamper gifting journey</p>
-                </div>
-                
-                <form method="POST">
-                    {% csrf_token %}
-                    {% for field in form %}
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">{{ field.label }}</label>
-                            {{ field }}
-                            {% if field.help_text %}
-                                <div class="form-text small">{{ field.help_text }}</div>
-                            {% endif %}
-                            {% for error in field.errors %}
-                                <div class="text-danger small">{{ error }}</div>
-                            {% endfor %}
-                        </div>
-                    {% endfor %}
-                    
-                    <button type="submit" class="btn btn-amazon w-100 fw-bold py-2 mt-2">Sign Up</button>
-                </form>
 
-                <hr class="my-4">
-                <div class="text-center">
-                    <p class="mb-0">Already have an account? <a href="{% url 'login' %}" class="text-primary text-decoration-none">Sign In</a></p>
+    <div class="register-card">
+        <div class="brand-header">
+            <div class="kitkat-logo">Join Now</div>
+            <p class="motto">Have a Break. Have a Hamper.</p>
+        </div>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-light py-2 px-3 mb-4 rounded-pill border-0 text-center shadow-sm" style="font-size: 12px; color: var(--kitkat-red);">
+                    <i class="fas fa-info-circle me-1"></i> <strong>{{ message }}</strong>
                 </div>
+            {% endfor %}
+        {% endif %}
+        
+        <form method="POST" novalidate>
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label class="form-label">Email Address</label>
+                <input type="email" name="email" placeholder="your@email.com" required value="{{ form.email.value|default:'' }}">
+                {% for error in form.email.errors %}
+                    <span class="error-text"><i class="fas fa-bolt"></i> {{ error }}</span>
+                {% endfor %}
             </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" name="password1" placeholder="Minimum 8 characters" required>
+                {% for error in form.password1.errors %}
+                    <span class="error-text">{{ error }}</span>
+                {% endfor %}
+            </div>
+            
+            <div class="mb-4">
+                <label class="form-label">Confirm Password</label>
+                <input type="password" name="password2" placeholder="Repeat password" required>
+                {% for error in form.password2.errors %}
+                    <span class="error-text">{{ error }}</span>
+                {% endfor %}
+            </div>
+            
+            <button type="submit" class="btn-register">Snap to Create Account</button>
+        </form>
+        
+        <div class="login-link">
+            <p class="mb-0 text-white-50">Member already? <a href="{% url 'login' %}">SIGN IN</a></p>
         </div>
     </div>
+
 </body>
 </html>

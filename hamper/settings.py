@@ -48,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'hamperapp.middleware.NoCacheMiddleware',
 ]
 
 ROOT_URLCONF = 'hamper.urls'
@@ -99,6 +100,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Custom Authentication Backend
+AUTHENTICATION_BACKENDS = [
+    'hamperapp.views.EmailBackend',
+]
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
@@ -129,3 +135,22 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'bilalsalam65@gmail.com'
 EMAIL_HOST_PASSWORD = 'cfqvnspjoggeykhg'
+
+# Image optimization settings
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB
+
+# Cache settings for media files (30 days)
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+import os 
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
