@@ -590,6 +590,30 @@
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
+
+/* Login Button - Styled to Match KitKat Theme */
+.btn-login-kitkat {
+    background: white;
+    color: #e61e2a;
+    border: none !important;
+    border-radius: 50px;
+    padding: 8px 20px;
+    font-weight: 800;
+    font-size: 12px;
+    text-transform: uppercase;
+    text-decoration: none !important;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: inline-block;
+}
+
+.btn-login-kitkat:hover {
+    background: #fdfaf0; /* Wafer Cream */
+    color: #e61e2a;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    text-decoration: none;
+}
         
     </style>
 </head>
@@ -622,7 +646,8 @@
                     <button type="submit" class="btn-logout-kitkat">LOGOUT</button>
                 </form>
             {% else %}
-                <a href="{% url 'login' %}" class="nav-link-custom">👤 LOGIN</a>
+            
+                <a href="{% url 'login' %}" class="btn-login-kitkat">👤 LOGIN</a>
                 <a href="{% url 'cart_summary' %}" class="cart-icon" style="text-decoration: none;">🛒</a>
             {% endif %}
         </div>

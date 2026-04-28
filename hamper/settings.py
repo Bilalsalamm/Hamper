@@ -1,3 +1,5 @@
+
+import os
 """
 Django settings for hamper project.
 
@@ -25,7 +27,7 @@ SECRET_KEY = 'django-insecure-^_qut1rx-7bbooia5kxdp@wy2ei1$yb@j8jhfemv00)8e$b5u3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['bilalsalam.pythonanywhere.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -125,7 +127,8 @@ LOGIN_REDIRECT_URL = '/'
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
-import os
+
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 

@@ -206,18 +206,19 @@ def custom_login(request):
             if user is not None:
                 # Check if user is active (email verified)
                 if not user.is_active:
-                    messages.error(request, 'Your account is not active. Please verify your email first.')
+                    messages.error(request, '❌ Your account is not active. Please verify your email first.')
                     return redirect('verify_otp')
                 
                 # Login successful
                 login(request, user)
-                messages.success(request, f'Welcome back, {user.username}!')
+                messages.success(request, f'✅ Welcome back, {user.username}!')
                 
                 # Redirect to next page or home
                 next_page = request.GET.get('next', 'hamper_list')
                 return redirect(next_page)
             else:
-                messages.error(request, 'Invalid email or password.')
+                form.add_error(None, '❌ Invalid email or password.')
+        # Form has errors, will be displayed in template
     else:
         form = EmailAuthenticationForm()
     
@@ -328,6 +329,127 @@ HamperWorld Team
             messages.error(request, 'Failed to send OTP. Please try again.')
     
     return render(request, 'verify_otp_resend.html', {'email': user.email})
+
+
+def forgot_password(request):
+    """Send OTP for password reset"""
+    if request.method == 'POST':
+        email = request.POST.get('email', '').strip()
+        
+        # Validate email is not empty
+        if not email:
+            messages.error(request, '❌ Please enter your email address.')
+            return render(request, 'forgot_password.html')
+        
+        # Check if email exists
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            messages.error(request, '❌ No account found with this email address.')
+            return render(request, 'forgot_password.html')
+        
+        # Generate OTP
+        otp = str(random.randint(100000, 999999))
+        otp_expires_at = timezone.now() + timedelta(minutes=10)
+        
+        # Create or update EmailVerification record for password reset
+        verification, created = EmailVerification.objects.get_or_create(user=user)
+        verification.otp = otp
+        verification.otp_expires_at = otp_expires_at
+        verification.is_verified = False  # Reset verification status
+        verification.save()
+        
+        # Send OTP via email
+        email_subject = "🔐 Password Reset OTP - HamperWorld"
+        email_body = f"""
+Hello {user.username},
+
+You requested to reset your password. Your verification code is:
+
+🔐 {otp}
+
+This code will expire in 10 minutes.
+
+If you didn't request this, please ignore this email.
+
+Best regards,
+HamperWorld Team
+"""
+        try:
+            send_mail(
+                email_subject,
+                email_body,
+                settings.DEFAULT_FROM_EMAIL,
+                [email],
+                fail_silently=False,
+            )
+            messages.success(request, f'✅ OTP sent to {email}. Please check your inbox.')
+            # Store email in session for password reset
+            request.session['reset_email'] = email
+            return redirect('reset_password')
+        except Exception as e:
+            messages.error(request, f'❌ Failed to send email: {str(e)}')
+            return render(request, 'forgot_password.html')
+    
+    return render(request, 'forgot_password.html')
+
+
+def reset_password(request):
+    """Reset password with OTP verification"""
+    reset_email = request.session.get('reset_email')
+    
+    if not reset_email:
+        messages.error(request, 'Invalid session. Please request password reset again.')
+        return redirect('forgot_password')
+    
+    try:
+        user = User.objects.get(email=reset_email)
+        verification = EmailVerification.objects.get(user=user)
+    except (User.DoesNotExist, EmailVerification.DoesNotExist):
+        messages.error(request, '❌ Invalid session. Please request password reset again.')
+        return redirect('forgot_password')
+    
+    if request.method == 'POST':
+        otp_entered = request.POST.get('otp', '').strip()
+        new_password = request.POST.get('new_password', '').strip()
+        confirm_password = request.POST.get('confirm_password', '').strip()
+        
+        # Check if OTP is valid
+        if not verification.is_otp_valid():
+            messages.error(request, '⏰ OTP has expired. Please request a new one.')
+            del request.session['reset_email']
+            return redirect('forgot_password')
+        
+        # Verify OTP
+        if otp_entered != verification.otp:
+            messages.error(request, '❌ Invalid OTP. Please try again.')
+            return render(request, 'reset_password.html', {'email': reset_email})
+        
+        # Validate passwords match
+        if new_password != confirm_password:
+            messages.error(request, '❌ Passwords do not match.')
+            return render(request, 'reset_password.html', {'email': reset_email})
+        
+        # Validate password strength
+        if len(new_password) < 8:
+            messages.error(request, '❌ Password must be at least 8 characters long.')
+            return render(request, 'reset_password.html', {'email': reset_email})
+        
+        # Update password
+        user.set_password(new_password)
+        user.save()
+        
+        # Clear verification
+        verification.is_verified = True
+        verification.save()
+        
+        # Clear session
+        del request.session['reset_email']
+        
+        messages.success(request, '✅ Password reset successfully! You can now login with your new password.')
+        return redirect('login')
+    
+    return render(request, 'reset_password.html', {'email': reset_email})
 
 
 @cache_control(no_cache=True, no_store=True, must_revalidate=True)
@@ -667,25 +789,54 @@ def cart_summary(request):
     cart = Cart(request)
     cart_items = []
     
-    for hamper_id, item in cart.cart.items():
+    # We iterate through the session dictionary
+    for item_id, item in cart.cart.items():
         cart_items.append({
-            'id': hamper_id,
-            'name': item['name'],
-            'price': float(item['price']),
-            'quantity': item['quantity'],
-            'image': item['image'],
-            'total': float(item['price']) * item['quantity']
+            'product_id': item_id, # MUST match the template tag: item.product_id
+            'name': item.get('name'),
+            'price': float(item.get('price', 0)),
+            'quantity': item.get('quantity', 0),
+            'image': item.get('image'),
+            'total': float(item.get('price', 0)) * item.get('quantity', 0)
         })
     
-    total = cart.get_total()
-    cart_count = cart.get_total_items()
     return render(request, 'cart_summary.html', {
         'cart_items': cart_items,
-        'total': total,
-        'cart_items_count': cart_count
+        'total': cart.get_total(),
+        'cart_items_count': cart.get_total_items()
     })
-
 @login_required
 def order_history(request):
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
     return render(request, 'order_history.html', {'orders': orders})
+
+
+from django.shortcuts import redirect
+
+def clear_cart(request):
+    if 'cart' in request.session:
+        request.session['cart'] = {}
+        request.session.modified = True
+    return redirect('cart_summary')
+
+
+def cart_remove_one(request, product_id):
+    cart = request.session.get('cart', {})
+    product_id = str(product_id)
+    
+    if product_id in cart:
+        if cart[product_id]['quantity'] > 1:
+            cart[product_id]['quantity'] -= 1
+        else:
+            del cart[product_id]
+        request.session.modified = True
+    return redirect('cart_summary')
+
+def cart_item_delete(request, product_id):
+    cart = request.session.get('cart', {})
+    product_id = str(product_id)
+    
+    if product_id in cart:
+        del cart[product_id]
+        request.session.modified = True
+    return redirect('cart_summary')

@@ -1,9 +1,10 @@
 class Cart:
     def __init__(self, request):
         self.session = request.session
-        cart = self.session.get('session_cart')
+        # Change 'session_cart' to 'cart' to match your views
+        cart = self.session.get('cart')
         if not cart:
-            cart = self.session['session_cart'] = {}
+            cart = self.session['cart'] = {}
         self.cart = cart
 
     def add(self, hamper):

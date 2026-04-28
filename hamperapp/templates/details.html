@@ -2,238 +2,267 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ hamper.name }} | HamperWorld</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{{ hamper.name }} | HamperWorld Red Edition</title>
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        /* Navbar */
+        :root {
+            --kitkat-red: #e61e2a;
+            --kitkat-dark: #8b0000;
+            --amz-orange: #ffa41c;
+            --amz-yellow: #ffd814;
+            --amz-link: #007185;
+            --amz-bg-grey: #F0F2F2;
+        }
+
+        body { 
+            background-color: #fff;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #0f1111;
+            margin: 0;
+        }
+
+        /* --- KitKat Red Navbar --- */
         .navbar-custom { 
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-            padding: 14px 0;
-            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.25);
+            background: var(--kitkat-red) !important;
+            padding: 12px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
         }
-        
-        .navbar-brand-text { 
-            font-weight: 800; 
-            font-size: 28px; 
-            color: white !important;
-            letter-spacing: 1.5px;
-            transition: all 0.3s;
-            background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-        }
-        
-        .navbar-brand-text:hover {
-            transform: scale(1.08);
-            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
-        }
-        
-        .logo-svg {
-            width: 40px;
-            height: 40px;
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-        
-        .navbar-brand-text:hover .logo-svg {
-            transform: rotateY(360deg) scale(1.1);
-        }
-        
-        .logo-svg-gift {
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        .navbar-brand-text:hover .logo-svg-gift {
-            animation: bounce 0.6s ease-in-out;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
-        }
-        
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            25% { transform: translateY(-15px); }
-            50% { transform: translateY(-25px); }
-            75% { transform: translateY(-15px); }
-        }
-        
-        .logo-text-brand {
-            background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .nav-link-custom { 
-            color: white !important; 
-            transition: all 0.3s;
-            font-weight: 600;
-            font-size: 14px;
-            padding: 6px 12px;
-            border-radius: 6px;
-        }
-        
-        .nav-link-custom:hover { 
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-        
-        .btn-logout {
-            background-color: rgba(255, 255, 255, 0.25);
-            border: 2px solid white;
-            color: white;
-            border-radius: 20px;
-            padding: 6px 18px;
-            font-weight: 700;
-            transition: all 0.3s;
-            font-size: 13px;
-        }
-        
-        .btn-logout:hover {
-            background-color: white;
-            color: #667eea;
-            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.4);
-            transform: translateY(-2px);
-        }
-        
-        .cart-icon { 
-            color: white; 
-            font-size: 24px; 
-            cursor: pointer; 
-            transition: all 0.3s;
-            position: relative;
-        }
-        
-        .cart-icon:hover { 
-            transform: scale(1.15) rotate(10deg);
-            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
-        }
-        
-        .cart-count { 
+
+        .kitkat-logo-badge-nav {
+            font-family: 'Oswald', sans-serif;
             background: white;
-            color: #667eea; 
-            border-radius: 50%; 
-            width: 28px; 
-            height: 28px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 11px; 
-            font-weight: 900; 
-            position: absolute;
-            top: -12px;
-            right: -12px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            color: var(--kitkat-red);
+            -webkit-text-fill-color: var(--kitkat-red);
+            padding: 4px 18px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            font-size: 18px;
+            font-weight: 800;
+            transform: skew(-10deg);
+            display: inline-block;
+            text-decoration: none;
+            box-shadow: 2px 2px 0px var(--kitkat-dark);
         }
-        
-        .price-large { font-size: 32px; color: #b12704; font-weight: bold; margin: 20px 0; }
-        .btn-add-cart { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; color: white; font-weight: bold; width: 100%; padding: 12px; border-radius: 4px; transition: all 0.3s; }
-        .btn-add-cart:hover { box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); transform: translateY(-2px); color: white; }
-        .btn-buy-now { background-color: #ff6b35; border: none; color: white; font-weight: bold; width: 100%; padding: 12px; border-radius: 4px; margin-top: 10px; transition: all 0.3s; }
-        .btn-buy-now:hover { box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3); transform: translateY(-2px); }
-        .rating { color: #ffc107; font-size: 16px; }
+
+        /* --- Amazon Layout Container --- */
+        .amazon-container {
+            max-width: 1300px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        /* --- Medium Image Section --- */
+        .product-image-section { 
+            text-align: center; 
+            position: sticky; 
+            top: 100px;
+            padding: 10px;
+        }
+
+        .product-image-section img { 
+            max-width: 100%; 
+            max-height: 420px; 
+            width: auto;
+            object-fit: contain;
+        }
+
+        /* --- Middle Detail Section --- */
+        .product-title-amz {
+            font-size: 24px;
+            font-weight: 500;
+            line-height: 32px;
+            color: #0f1111;
+            margin-bottom: 5px;
+        }
+
+        .amz-link { color: var(--amz-link); text-decoration: none; font-size: 14px; }
+        .amz-link:hover { color: #C7511F; text-decoration: underline; }
+
+        .price-section { 
+            border-top: 1px solid #e7e7e7; 
+            border-bottom: 1px solid #e7e7e7; 
+            padding: 15px 0; 
+            margin: 15px 0; 
+        }
+
+        .price-symbol { font-size: 14px; vertical-align: top; margin-top: 6px; display: inline-block; }
+        .price-whole { font-size: 28px; font-weight: 500; }
+
+        /* --- Right Sidebar Buy Box --- */
+        .buy-box {
+            border: 1px solid #d5d9d9;
+            border-radius: 8px;
+            padding: 20px;
+            position: sticky;
+            top: 100px;
+        }
+
+        .instock-text { color: #007600; font-size: 18px; display: block; margin-bottom: 10px; }
+
+        /* Quantity Selector Styling */
+        .qty-dropdown {
+            background-color: var(--amz-bg-grey);
+            border: 1px solid #D5D9D9;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(213,217,217,.5);
+            font-size: 13px;
+            padding: 4px 10px;
+            cursor: pointer;
+        }
+
+        .amz-btn {
+            border-radius: 20px;
+            padding: 10px;
+            width: 100%;
+            font-size: 13px;
+            border: 1px solid;
+            margin-bottom: 10px;
+            text-align: center;
+            display: block;
+            text-decoration: none;
+            color: #0f1111;
+            font-weight: 400;
+        }
+
+        .btn-cart-amz { background: var(--amz-yellow); border-color: #fcd200; }
+        .btn-cart-amz:hover { background: #f7ca00; }
+
+        .btn-buy-amz { background: var(--amz-orange); border-color: #ff8f00; }
+        .btn-buy-amz:hover { background: #f3a847; }
+
+        .specs-table td { font-size: 14px; padding: 4px 0; }
+        .label-cell { font-weight: 700; width: 100px; color: #565959; }
+
+        @media (max-width: 768px) {
+            .product-image-section { position: relative; top: 0; }
+            .buy-box { position: relative; top: 0; margin-top: 20px; }
+        }
     </style>
 </head>
-<body style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh;">
+<body>
+
     <nav class="navbar navbar-custom">
         <div class="container-fluid px-4">
-            <a class="navbar-brand-text" href="{% url 'hamper_list' %}">
-                <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="giftGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#fff;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#e8e8e8;stop-opacity:1" />
-                        </linearGradient>
-                        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-                            <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.3"/>
-                        </filter>
-                    </defs>
-                    <g class="logo-svg-gift" filter="url(#shadow)">
-                        <rect x="20" y="35" width="60" height="50" fill="url(#giftGradient)" stroke="#667eea" stroke-width="2" rx="4"/>
-                        <rect x="22" y="37" width="28" height="15" fill="white" opacity="0.6" rx="2"/>
-                        <rect x="20" y="55" width="60" height="8" fill="#764ba2" rx="4"/>
-                        <rect x="48" y="35" width="8" height="50" fill="#764ba2" rx="4"/>
-                        <circle cx="40" cy="30" r="6" fill="#764ba2"/>
-                        <circle cx="60" cy="30" r="6" fill="#764ba2"/>
-                        <circle cx="50" cy="28" r="8" fill="#ff6b9d" opacity="0.9"/>
-                        <circle cx="55" cy="35" r="1.5" fill="#ffd700" opacity="0.8"/>
-                        <circle cx="25" cy="50" r="1" fill="#ffd700" opacity="0.6"/>
-                        <circle cx="70" cy="55" r="1.2" fill="#ffd700" opacity="0.7"/>
-                        <path d="M 30 40 Q 50 42 70 40" stroke="white" stroke-width="1.5" fill="none" opacity="0.4"/>
-                    </g>
-                </svg>
-                <span class="logo-text-brand">HamperWorld</span>
+            <a href="{% url 'hamper_list' %}" style="text-decoration: none;">
+                <div class="kitkat-logo-badge-nav">Hamper</div>
+                <span style="color: white; font-weight: 800; font-size: 22px; margin-left: 5px; text-transform: uppercase;">World</span>
             </a>
-            <div style="display: flex; gap: 20px; align-items: center; margin-left: auto;">
+            <div class="ms-auto d-flex align-items-center gap-3">
                 {% if user.is_authenticated %}
-                    <span class="nav-link-custom">👤 {{ user.username }}</span>
-                    <form action="{% url 'logout' %}" method="post" class="d-inline">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-logout">Logout</button>
-                    </form>
-                {% else %}
-                    <a href="{% url 'login' %}" class="nav-link-custom">👤 Login</a>
+                    <span style="color: white; font-size: 12px; font-weight: 700;">HI, {{ user.username|upper }}</span>
                 {% endif %}
-                <a href="{% url 'cart_summary' %}" class="cart-icon" style="text-decoration: none;">
-                    🛒
+                <a href="{% url 'cart_summary' %}" class="text-white text-decoration-none position-relative">
+                    <i class="fa-solid fa-cart-shopping fs-4"></i>
                     {% if cart_items_count > 0 %}
-                        <span class="cart-count">{{ cart_items_count }}</span>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark" style="font-size: 10px;">{{ cart_items_count }}</span>
                     {% endif %}
                 </a>
             </div>
         </div>
     </nav>
 
-    <div class="container mt-5 mb-5">
-        <div class="row bg-white p-5 rounded" style="box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-            <div class="col-md-5">
-                {% if hamper.image %}
-                    <img src="{{ hamper.image.url }}" class="img-fluid rounded" alt="{{ hamper.name }}" style="width: 100%; max-width: 400px;" loading="lazy" decoding="async">
-                {% else %}
-                    <img src="https://via.placeholder.com/400x400?text=No+Image" class="img-fluid rounded" alt="No image" loading="lazy" decoding="async">
-                {% endif %}
+    <div class="amazon-container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="product-image-section">
+                    {% if hamper.image %}
+                        <img src="{{ hamper.image.url }}" alt="{{ hamper.name }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/400x400?text=Premium+Hamper" alt="No Image">
+                    {% endif %}
+                </div>
             </div>
 
-            <div class="col-md-7">
-                <h1 style="font-size: 28px; font-weight: bold;margin-bottom: 10px;">{{ hamper.name }}</h1>
-                <div class="rating mb-3">⭐⭐⭐⭐⭐ 150 ratings</div>
+            <div class="col-md-5 px-md-4">
+                <h1 class="product-title-amz">{{ hamper.name }}</h1>
+                <a href="#" class="amz-link">Visit the HamperWorld Store</a>
                 
-                <p class="price-large">INR {{ hamper.price }}</p>
-                
-                <div style="background-color: #f0f0f0; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
-                    <h6>Product Details</h6>
-                    <p class="text-muted">{{ hamper.description }}</p>
+                <div class="d-flex align-items-center mt-1">
+                    <span class="text-warning small"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></span>
+                    <span class="rating-count amz-link">152 ratings</span>
                 </div>
 
-                <div style="background-color: #f0f0f0; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
-                    <p><strong>✓</strong> Free Delivery on orders over ₹2500</p>
-                    <p><strong>✓</strong> 30-Day Returns</p>
-                    <p><strong>✓</strong> Secure Checkout</p>
+                <div class="price-section">
+                    <span class="price-symbol">₹</span>
+                    <span class="price-whole">{{ hamper.price }}</span>
+                    <p class="small text-muted mb-0">Inclusive of all taxes</p>
+                    <p class="small amz-link mt-1">No Returns</p>
                 </div>
 
-                {% if user.is_authenticated %}
-                    <div style="display: grid; gap: 10px;">
-                        <a href="{% url 'cart_add' hamper.pk %}" class="btn-add-cart">🛒 Add to Cart</a>
-                        <a href="{% url 'checkout' hamper.pk %}" class="btn-buy-now">⚡ Buy Now</a>
+                <table class="specs-table w-100 mb-4">
+                    <tr><td class="label-cell">Brand</td><td>HamperWorld</td></tr>
+                    <tr><td class="label-cell">Edition</td><td>Hampers Edition</td></tr>
+                </table>
+
+                <h5 class="fs-6 fw-bold">About this item</h5>
+                <ul class="small ps-3">
+                    <li class="mb-2">{{ hamper.description }}</li>
+                    <li class="mb-2">Carefully curated with premium treats.</li>
+                </ul>
+            </div>
+
+            <div class="col-md-3">
+                <div class="buy-box">
+                    <span class="price-whole">₹{{ hamper.price }}</span>
+                    <p class="small mt-2 mb-1">FREE delivery <span class="fw-bold">Tomorrow</span>.</p>
+                    <span class="instock-text">In Stock</span>
+
+                    {% if user.is_authenticated %}
+                        <div class="mb-3">
+                            <label for="quantity" class="small fw-bold me-2">Quantity:</label>
+                            <select id="quantity" class="qty-dropdown">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+
+                        <a href="{% url 'cart_add' hamper.pk %}" id="add-to-cart-btn" class="amz-btn btn-cart-amz">Add to Cart</a>
+                        <a href="{% url 'checkout' hamper.pk %}" id="buy-now-btn" class="amz-btn btn-buy-amz">Buy Now</a>
+                    {% else %}
+                        <a href="{% url 'login' %}?next={{ request.path }}" class="amz-btn btn-buy-amz">Sign in to buy</a>
+                    {% endif %}
+
+                    <div class="small mt-3">
+                        <p class="mb-1"><span class="text-muted">Ships from</span> HamperWorld</p>
+                        <p class="mb-1"><span class="text-muted">Sold by</span> HamperWorld</p>
                     </div>
-                {% else %}
-                    <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-primary btn-lg w-100 fw-bold">Login to Purchase</a>
-                    <p class="text-center text-danger mt-3 small">You must be logged in to place an order.</p>
-                {% endif %}
+                </div>
             </div>
         </div>
     </div>
+
+    <script>
+        const qtySelect = document.getElementById('quantity');
+        const cartBtn = document.getElementById('add-to-cart-btn');
+        const buyBtn = document.getElementById('buy-now-btn');
+
+        function updateUrls() {
+            if (!qtySelect) return;
+            const qty = qtySelect.value;
+            // Get original URLs from the attributes (setting them initially)
+            const baseUrlCart = "{% url 'cart_add' hamper.pk %}";
+            const baseUrlBuy = "{% url 'checkout' hamper.pk %}";
+            
+            cartBtn.href = baseUrlCart + "?quantity=" + qty;
+            buyBtn.href = baseUrlBuy + "?quantity=" + qty;
+        }
+
+        if(qtySelect) {
+            qtySelect.addEventListener('change', updateUrls);
+            updateUrls(); // Run once on load
+        }
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

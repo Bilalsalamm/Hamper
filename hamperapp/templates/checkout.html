@@ -368,10 +368,7 @@
                         <input type="text" class="form-control" id="full_name" name="full_name" placeholder="John Doe" required>
                     </div>
 
-                    <div class="form-group">
-                        <label for="email" class="form-label required-field">Email Address</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="john@example.com">
-                    </div>
+                    
 
                     <div class="form-group">
                         <label for="phone" class="form-label required-field">Phone Number</label>
@@ -478,66 +475,18 @@
         // Cities data organized by country and state (can be expanded)
         const citiesData = {
             IN: {
-                DL: ['New Delhi', 'Delhi Cantt', 'Dwarka'],
-                MH: ['Mumbai', 'Pune', 'Nagpur', 'Aurangabad', 'Nashik'],
-                KA: ['Bangalore', 'Mysore', 'Mangalore', 'Belagavi', 'Hubballi'],
-                TN: ['Chennai', 'Coimbatore', 'Madurai', 'Salem', 'Trichy'],
-                GJ: ['Ahmedabad', 'Surat', 'Vadodara', 'Rajkot', 'Junagadh'],
-                UP: ['Lucknow', 'Kanpur', 'Varanasi', 'Agra', 'Meerut'],
-                AP: ['Hyderabad', 'Visakhapatnam', 'Vijayawada', 'Tirupati'],
-                WB: ['Kolkata', 'Darjeeling', 'Asansol', 'Siliguri'],
-                TG: ['Hyderabad', 'Warangal', 'Nizamabad'],
-                RJ: ['Jaipur', 'Jodhpur', 'Udaipur', 'Kota', 'Ajmer'],
-                MP: ['Bhopal', 'Indore', 'Jabalpur', 'Gwalior', 'Ujjain'],
-                OP: ['Bhubaneswar', 'Rourkela', 'Cuttack', 'Sambalpur'],
-                JH: ['Ranchi', 'Jamshedpur', 'Dhanbad', 'Giridih'],
-                BR: ['Patna', 'Gaya', 'Bhagalpur', 'Muzaffarpur'],
-                PB: ['Chandigarh', 'Amritsar', 'Ludhiana', 'Jalandhar'],
-                HR: ['Gurugram', 'Faridabad', 'Hisar', 'Rohtak'],
-                HP: ['Shimla', 'Mandi', 'Solan', 'Kangra'],
-                UT: ['Dehradun', 'Haridwar', 'Nainital', 'Rishikesh'],
+                
                 KL: ['Kochi', 'Thiruvananthapuram', 'Kozhikode', 'Kottayam'],
-                GA: ['Panaji', 'Margao', 'Vasco da Gama'],
-                AS: ['Guwahati', 'Silchar', 'Dibrugarh', 'Nagaon'],
-            },
-            US: {
-                CA: ['Los Angeles', 'San Francisco', 'San Diego', 'Sacramento'],
-                NY: ['New York', 'Buffalo', 'Rochester', 'Albany'],
-                TX: ['Houston', 'Dallas', 'Austin', 'San Antonio'],
-                FL: ['Miami', 'Orlando', 'Tampa', 'Jacksonville'],
-                IL: ['Chicago', 'Springfield'],
-            },
-            GB: {
-                ENG: ['London', 'Manchester', 'Birmingham', 'Bristol'],
-                SCT: ['Edinburgh', 'Glasgow', 'Aberdeen'],
-                WLS: ['Cardiff', 'Swansea'],
+                
             },
         };
 
         // State codes mapping (for major countries)
         const stateCodesMap = {
             IN: {
-                DL: 'Delhi',
-                MH: 'Maharashtra',
-                KA: 'Karnataka',
-                TN: 'Tamil Nadu',
-                GJ: 'Gujarat',
-                UP: 'Uttar Pradesh',
-                AP: 'Andhra Pradesh',
-                WB: 'West Bengal',
-                TG: 'Telangana',
-                RJ: 'Rajasthan',
-                MP: 'Madhya Pradesh',
-                OP: 'Odisha',
-                JH: 'Jharkhand',
-                BR: 'Bihar',
-                PB: 'Punjab',
-                HR: 'Haryana',
-                HP: 'Himachal Pradesh',
-                UT: 'Uttarakhand',
+    
                 KL: 'Kerala',
-                GA: 'Goa',
-                AS: 'Assam',
+             
             },
             US: {
                 CA: 'California',
