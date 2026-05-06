@@ -114,6 +114,12 @@
         .status-packed { background: #e3f2fd; color: #1976d2; }
         .status-shipped { background: #f3e5f5; color: #7b1fa2; }
         .status-delivered { background: #e8f5e9; color: #2e7d32; }
+        .status-cancelled { background: #ffebee; color: #c62828; }
+        
+        /* Payment Verification Badges */
+        .payment-verified { background: #e8f5e9; color: #2e7d32; }
+        .payment-pending { background: #fff8e1; color: #ffa000; }
+        .payment-required { background: #ffebee; color: #c62828; }
 
         .order-id-label {
             font-family: monospace;
@@ -203,6 +209,7 @@
                         <th>Date</th>
                         <th>Selection</th>
                         <th>Track Status</th>
+                        <th>Payment Verification</th>
                         <th class="text-end">Amount</th>
                     </tr>
                 </thead>
@@ -225,8 +232,19 @@
                                 <div class="status-pill status-shipped"><i class="fas fa-shipping-fast"></i> Shipped</div>
                             {% elif order.status == 'Packed' %}
                                 <div class="status-pill status-packed"><i class="fas fa-box"></i> Packed</div>
+                            {% elif order.status == 'Cancelled' %}
+                                <div class="status-pill status-cancelled"><i class="fas fa-times-circle"></i> Cancelled</div>
                             {% else %}
                                 <div class="status-pill status-pending"><i class="fas fa-hourglass-half"></i> Processing</div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if order.payment_status == 'Paid' %}
+                                <div class="status-pill payment-verified"><i class="fas fa-check-circle"></i> Verified</div>
+                            {% elif order.payment_status == 'Pending Verification' %}
+                                <div class="status-pill payment-pending"><i class="fas fa-clock"></i> Pending Review</div>
+                            {% else %}
+                                <div class="status-pill payment-required"><i class="fas fa-exclamation-circle"></i> Reviewing</div>
                             {% endif %}
                         </td>
                         <td class="text-end">
@@ -235,7 +253,7 @@
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="5">
+                        <td colspan="6">
                             <div class="empty-basket">
                                 <i class="fas fa-shopping-bag"></i>
                                 <h3 class="fw-bold">No Orders Yet</h3>

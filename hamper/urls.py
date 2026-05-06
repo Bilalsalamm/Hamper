@@ -24,6 +24,8 @@ urlpatterns = [
     path('', include('hamperapp.urls')),
 ]
 
+
+
+# This tells Django how to find the images in your 'media' folder
 if settings.DEBUG:
-   
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -411,6 +411,125 @@
             content: " *";
             color: #e61e2a;
         }
+
+        /* UPI Payment Section */
+        .upi-payment-card {
+            background: #fffcfc;
+            border: 2px solid #ffebeb;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .upi-payment-card h2 {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+        }
+
+        .upi-qr-section {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 25px;
+        }
+
+        .upi-qr-box {
+            flex: 0 0 180px;
+            text-align: center;
+        }
+
+        .upi-qr-box img {
+            max-width: 160px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+        }
+
+        .upi-qr-box p {
+            color: #333;
+            font-weight: 700;
+            margin: 0;
+            font-size: 14px;
+            word-break: break-all;
+        }
+
+        .upi-payment-details {
+            flex: 1;
+        }
+
+        .upi-alert {
+            background: #fff3cd;
+            border: 1px solid #ffe5b4;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #856404;
+            font-size: 14px;
+        }
+
+        .upi-alert strong {
+            color: #e61e2a;
+            font-size: 16px;
+        }
+
+        .upi-file-upload {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .upi-file-upload:hover {
+            border-color: #e61e2a;
+            background: #fff5f5;
+        }
+
+        .upi-file-upload input[type="file"] {
+            display: none;
+        }
+
+        .upi-file-upload label {
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin: 0;
+        }
+
+        .upi-file-upload label i {
+            font-size: 28px;
+            color: #e61e2a;
+        }
+
+        .upi-file-upload label .upload-text {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .upi-file-upload label .upload-hint {
+            font-size: 12px;
+            color: #999;
+        }
+
+        @media (max-width: 768px) {
+            .upi-qr-section {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .upi-qr-box {
+                flex: 1;
+                width: 100%;
+            }
+
+            .upi-payment-card {
+                padding: 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -451,8 +570,9 @@
             <div class="checkout-card">
                 <h2><i class="fas fa-map-marker-alt"></i> Shipping Address</h2>
 
-                <form method="POST">
+                <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
+                    <input type="hidden" name="quantity" value="{{ quantity }}">
 
                     <!-- Personal Information -->
                     <div class="form-group">
@@ -460,9 +580,15 @@
                         <input type="text" class="form-control" id="full_name" name="full_name" placeholder="John Doe" required>
                     </div>
 
-                    <div class="form-group">
-                        <label for="phone" class="form-label required-field">Phone Number</label>
-                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="+91 98765 43210">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" value="{{ user.email }}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone" class="form-label required-field">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="+91 98765 43210">
+                        </div>
                     </div>
 
                     <hr class="section-divider">
@@ -505,6 +631,27 @@
                         <div class="form-group">
                             <label for="address" class="form-label required-field">Street Address</label>
                             <input type="text" class="form-control" id="address" name="address" placeholder="123 Main Street, Apt 4B" required>
+                        </div>
+                    </div>
+
+                    <!-- UPI Payment Section -->
+                    <hr class="section-divider">
+                    <h2 style="margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid #f0f0f0; color: #1a1a2e; font-weight: 700; font-size: 20px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-qrcode" style="color: #e61e2a; font-size: 24px;"></i> Payment Method</h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <div style="border: 1px solid #ddd; border-radius: 8px; padding: 20px; text-align: center; background: #fafafa;">
+                                <p style="margin-bottom: 15px; font-weight: 600; color: #333; font-size: 14px;">UPI Payment</p>
+                                <img src="/static/images/upi.png" alt="UPI QR Code" loading="lazy" decoding="async" style="max-width: 160px; height: auto; border-radius: 6px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+                                <p style="font-size: 13px; color: #666; margin: 0;">UPI ID: <strong style="color: #333; font-size: 14px;">bilalsalam65@oksbi</strong></p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <p style="font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #333;">📤 Upload Payment Proof</p>
+                            <label class="form-label" style="margin-bottom: 8px;">Transaction Screenshot (Optional)</label>
+                            <input type="file" class="form-control" name="payment_screenshot" accept="image/png,image/jpeg,image/jpg" style="padding: 12px 14px;">
+                            <small style="color: #999; margin-top: 8px; display: block;">JPG, PNG, JPEG (Max 5MB)</small>
                         </div>
                     </div>
 
@@ -642,6 +789,115 @@
             } else {
                 // Allow manual city entry for countries without predefined cities
                 citySelect.disabled = false;
+            }
+        }
+
+        // Enhanced file upload with drag & drop and validation
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.querySelector('input[name="payment_screenshot"]');
+            const uploadBox = document.querySelector('.upi-file-upload');
+
+            if (fileInput && uploadBox) {
+                // Click to upload
+                uploadBox.addEventListener('click', () => fileInput.click());
+
+                // Drag and drop
+                uploadBox.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    uploadBox.style.borderColor = '#e61e2a';
+                    uploadBox.style.background = '#fff5f5';
+                });
+
+                uploadBox.addEventListener('dragleave', () => {
+                    uploadBox.style.borderColor = '#ddd';
+                    uploadBox.style.background = 'transparent';
+                });
+
+                uploadBox.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    uploadBox.style.borderColor = '#ddd';
+                    uploadBox.style.background = 'transparent';
+                    
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        const file = files[0];
+                        // Validate file type
+                        if (!file.type.startsWith('image/')) {
+                            alert('Please upload an image file (JPG, PNG, JPEG)');
+                            return;
+                        }
+                        // Validate file size (5MB = 5242880 bytes)
+                        if (file.size > 5242880) {
+                            alert('File size must be less than 5MB');
+                            return;
+                        }
+                        // Set files using DataTransfer
+                        const dataTransfer = new DataTransfer();
+                        dataTransfer.items.add(file);
+                        fileInput.files = dataTransfer.files;
+                        updateFileName(fileInput);
+                    }
+                });
+
+                // Update file name display and validate
+                fileInput.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        // Validate file type
+                        if (!file.type.startsWith('image/')) {
+                            alert('Please upload an image file (JPG, PNG, JPEG)');
+                            fileInput.value = '';
+                            updateFileName(fileInput);
+                            return;
+                        }
+                        // Validate file size (5MB = 5242880 bytes)
+                        if (file.size > 5242880) {
+                            alert('File size must be less than 5MB. Your file is ' + (file.size / 1024 / 1024).toFixed(2) + 'MB');
+                            fileInput.value = '';
+                            updateFileName(fileInput);
+                            return;
+                        }
+                    }
+                    updateFileName(fileInput);
+                });
+            }
+        });
+
+        function updateFileName(fileInput) {
+            const uploadBox = document.querySelector('.upi-file-upload');
+            const uploadLabel = uploadBox.querySelector('label');
+            
+            if (fileInput.files.length > 0) {
+                const fileName = fileInput.files[0].name;
+                const fileSize = (fileInput.files[0].size / 1024).toFixed(2) + ' KB';
+                
+                uploadLabel.innerHTML = `
+                    <i class="fas fa-check-circle" style="color: #27ae60; font-size: 32px;"></i>
+                    <span class="upload-text">✓ ${fileName}</span>
+                    <span class="upload-hint">${fileSize}</span>
+                    <input type="file" name="payment_screenshot" accept="image/png,image/jpeg,image/jpg" style="display: none;">
+                `;
+                uploadBox.style.borderColor = '#27ae60';
+                uploadBox.style.background = '#f0fdf4';
+                
+                // Re-attach the file input for form submission
+                const newFileInput = uploadLabel.querySelector('input[type="file"]');
+                if (newFileInput) {
+                    const dataTransfer = new DataTransfer();
+                    for (let i = 0; i < fileInput.files.length; i++) {
+                        dataTransfer.items.add(fileInput.files[i]);
+                    }
+                    newFileInput.files = dataTransfer.files;
+                }
+            } else {
+                uploadLabel.innerHTML = `
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <span class="upload-text">Click to upload or drag & drop</span>
+                    <span class="upload-hint">JPG, PNG, JPEG (Max 5MB)</span>
+                    <input type="file" name="payment_screenshot" accept="image/png,image/jpeg,image/jpg" style="display: none;">
+                `;
+                uploadBox.style.borderColor = '#ddd';
+                uploadBox.style.background = 'transparent';
             }
         }
     </script>

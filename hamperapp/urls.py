@@ -2,6 +2,8 @@ from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
 from django.views.decorators.cache import cache_control
+from django.conf import settings
+from django.conf.urls.static import static
 
 # Wrap auth views with cache control
 login_view = cache_control(no_cache=True, no_store=True, must_revalidate=True)(
@@ -31,3 +33,5 @@ urlpatterns = [
     path('cart/delete/<int:product_id>/', views.cart_item_delete, name='cart_item_delete'),
     path('cart/clear/', views.clear_cart, name='clear_cart'),
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -37,13 +37,22 @@ class EmailVerification(models.Model):
 class Order(models.Model):
     STATUS_CHOICES = [
         ('Pending', 'Pending'),
+        ('Verifying', 'Verifying Payment'), # New status for review
         ('Packed', 'Packed'),
         ('Shipped', 'Shipped'),
         ('Delivered', 'Delivered'),
+        ('Cancelled', 'Cancelled'),
+    ]
+
+    PAYMENT_STATUS_CHOICES = [
+        ('Not Paid', 'Not Paid'),
+        ('Pending Verification', 'Pending Verification'),
+        ('Paid', 'Paid'),
     ]
 
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    hamper = models.ForeignKey(Hamper, on_delete=models.CASCADE)    
+    hamper = models.ForeignKey(Hamper, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)    
     full_name = models.CharField(max_length=100)
     email = models.EmailField(max_length=255, blank=True, null=True)
     phone = models.CharField(max_length=20, blank=True, null=True)
@@ -53,13 +62,19 @@ class Order(models.Model):
     address = models.CharField(max_length=255)
     postal_code = models.CharField(max_length=20)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
+    payment_status = models.CharField(max_length=25, choices=PAYMENT_STATUS_CHOICES, default='Not Paid')
     created_at = models.DateTimeField(auto_now_add=True)
-    is_paid = models.BooleanField(default=False)
+    
+    # New field for manual payment verification
+    payment_screenshot = models.ImageField(upload_to='payment_proofs/', blank=True, null=True)
 
     def __str__(self):
         return f'Order {self.id} by {self.user.username}'
-
-
+    
+    @property
+    def is_paid(self):
+        """Backward compatibility property"""
+        return self.payment_status == 'Paid'
 # Signal to optimize images on save
 @receiver(post_save, sender=Hamper)
 def optimize_hamper_image(sender, instance, created, **kwargs):

@@ -26,10 +26,10 @@ import random
 
 @cache_control(no_cache=True, no_store=True, must_revalidate=True)
 def hamper_list(request):
-    all_hampers = Hamper.objects.all()
+    all_hampers = Hamper.objects.all().order_by('-id')
     
     # Pagination: 10 items per page
-    paginator = Paginator(all_hampers, 10)
+    paginator = Paginator(all_hampers, 12)
     page_number = request.GET.get('page')
     hampers = paginator.get_page(page_number)
     
@@ -485,11 +485,25 @@ def checkout(request, pk):
         city = request.POST.get('city')
         address = request.POST.get('address')
         postal_code = request.POST.get('postal_code')
+        payment_proof = request.FILES.get('payment_screenshot')
+        
+        # Validate payment screenshot if provided
+        if payment_proof:
+            # Validate file size (5MB max)
+            if payment_proof.size > 5242880:
+                messages.error(request, 'Payment screenshot must be less than 5MB.')
+                return redirect('checkout', pk=pk)
+            
+            # Validate file type - check if it's an image
+            if not payment_proof.content_type or not payment_proof.content_type.startswith('image/'):
+                messages.error(request, 'Payment screenshot must be an image file (JPG, PNG, etc).')
+                return redirect('checkout', pk=pk)
         
         try:
             order = Order.objects.create(
                 user=request.user,
                 hamper=hamper,
+                quantity=quantity,
                 full_name=full_name,
                 email=email or request.user.email,
                 phone=phone,
@@ -497,7 +511,9 @@ def checkout(request, pk):
                 state=state,
                 city=city,
                 address=address,
-                postal_code=postal_code
+                postal_code=postal_code,    
+                payment_screenshot=payment_proof,
+                status='Verifying'  # Set initial status to Verifying for manual review
             )
             
             # Get country and state names
@@ -511,28 +527,23 @@ def checkout(request, pk):
 ║                    HamperWorld                             ║
 ╚════════════════════════════════════════════════════════════╝
 
-Dear {full_name},
+Hello {full_name},
 
-Thank you for shopping with HamperWorld! Your order has been confirmed.
+Thank you for your order! We have received your UPI payment 
+screenshot. Our team is currently verifying the transaction. 
+You will receive a notification once your hamper is packed..
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ORDER DETAILS
+                ORDER SUMMARY
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Order Number: #{order.id}
-Order Date: {order.created_at.strftime('%d %B %Y')}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ITEM DETAILS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
 Product: {hamper.name}
-Price: ₹{hamper.price}
+Order Date: {order.created_at.strftime('%d %B %Y')}
 Quantity: {quantity}
-Subtotal: ₹{total_price}
-
+Total Amount: ₹{total_price}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-PRICE SUMMARY
+                PRICE SUMMARY
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Subtotal: ₹{total_price}
@@ -542,12 +553,10 @@ Tax: ₹0.00
 TOTAL: ₹{total_price}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DELIVERY INFORMATION
+                DELIVERY INFORMATION
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Delivery Address:
-{full_name}
-{address}
+Recipient: {full_name}
+Address: {address}
 {city}, {state_display}
 {country_name} - {postal_code}
 
@@ -615,6 +624,19 @@ def checkout_cart(request):
         city = request.POST.get('city')
         address = request.POST.get('address')
         postal_code = request.POST.get('postal_code')
+        payment_proof = request.FILES.get('payment_screenshot')
+        
+        # Validate payment screenshot if provided
+        if payment_proof:
+            # Validate file size (5MB max)
+            if payment_proof.size > 5242880:
+                messages.error(request, 'Payment screenshot must be less than 5MB.')
+                return redirect('checkout_cart')
+            
+            # Validate file type - check if it's an image
+            if not payment_proof.content_type or not payment_proof.content_type.startswith('image/'):
+                messages.error(request, 'Payment screenshot must be an image file (JPG, PNG, etc).')
+                return redirect('checkout_cart')
         
         try:
             # Create an order for each item in cart
@@ -650,7 +672,9 @@ def checkout_cart(request):
                             state=state,
                             city=city,
                             address=address,
-                            postal_code=postal_code
+                            postal_code=postal_code,
+                            payment_screenshot=payment_proof,
+                            status='Verifying'  # Set initial status to Verifying for manual review
                         )
                         orders_created.append(order)
                 except Hamper.DoesNotExist:
@@ -676,27 +700,21 @@ def checkout_cart(request):
 
 Dear {full_name},
 
-Thank you for shopping with HamperWorld! Your order has been confirmed.
+Thank you for your order! We have received your UPI payment 
+screenshot. Our team is currently verifying the transaction. 
+You will receive a notification once your hamper is packed.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ORDER DETAILS
+                ORDER SUMMARY
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Order Number(s): {order_ids}
+products: {', '.join([item['name'] for item in order_items_dict.values()])}
 Order Date: {orders_created[0].created_at.strftime('%d %B %Y')}
 Total Items: {len(orders_created)}
-
+Total Amount: ₹{total_amount:.2f}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ITEM DETAILS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Product Name                    | Qty | Price    | Total
-────────────────────────────────────────────────────────────
-{order_lines}
-────────────────────────────────────────────────────────────
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-PRICE SUMMARY
+                PRICE SUMMARY
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Subtotal: ₹{total_amount:.2f}
@@ -706,12 +724,10 @@ Tax: ₹0.00
 TOTAL: ₹{total_amount:.2f}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DELIVERY INFORMATION
+                DELIVERY INFORMATION
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Delivery Address:
-{full_name}
-{address}
+Recipient: {full_name}
+Address: {address}
 {city}, {state or 'N/A'}
 {dict(dj_countries).get(country, country)} - {postal_code}
 
