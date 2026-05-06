@@ -250,17 +250,127 @@
         function updateUrls() {
             if (!qtySelect) return;
             const qty = qtySelect.value;
-            // Get original URLs from the attributes (setting them initially)
             const baseUrlCart = "{% url 'cart_add' hamper.pk %}";
             const baseUrlBuy = "{% url 'checkout' hamper.pk %}";
             
-            cartBtn.href = baseUrlCart + "?quantity=" + qty;
-            buyBtn.href = baseUrlBuy + "?quantity=" + qty;
+            if (cartBtn) {
+                cartBtn.href = baseUrlCart + "?quantity=" + qty;
+            }
+            if (buyBtn) {
+                buyBtn.href = baseUrlBuy + "?quantity=" + qty;
+            }
         }
 
-        if(qtySelect) {
+        // Listen to quantity changes and update both button URLs
+        if (qtySelect) {
             qtySelect.addEventListener('change', updateUrls);
-            updateUrls(); // Run once on load
+        }
+
+        // Add to Cart AJAX functionality
+        if (cartBtn) {
+            cartBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const qty = qtySelect ? qtySelect.value : 1;
+                const url = "{% url 'cart_add' hamper.pk %}" + "?quantity=" + qty;
+                
+                fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showToastNotification(data.message);
+                        updateCartCountBadge(data.cart_count);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        }
+
+        // Initialize URLs on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateUrls();
+        });
+
+        function showToastNotification(message) {
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.className = 'toast-notification';
+            toast.textContent = '✓ ' + message;
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 30px;
+                right: 30px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 8px;
+                box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+                z-index: 9999;
+                font-weight: 600;
+                animation: slideIn 0.3s ease;
+                max-width: 400px;
+            `;
+            
+            // Add animation keyframes if not already added
+            if (!document.getElementById('toast-styles')) {
+                const style = document.createElement('style');
+                style.id = 'toast-styles';
+                style.textContent = `
+                    @keyframes slideIn {
+                        from {
+                            transform: translateX(400px);
+                            opacity: 0;
+                        }
+                        to {
+                            transform: translateX(0);
+                            opacity: 1;
+                        }
+                    }
+                    @keyframes slideOut {
+                        from {
+                            transform: translateX(0);
+                            opacity: 1;
+                        }
+                        to {
+                            transform: translateX(400px);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            document.body.appendChild(toast);
+            
+            // Remove toast after 3 seconds
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        function updateCartCountBadge(count) {
+            const cartLink = document.querySelector('a[href*="/cart/"]');
+            if (cartLink) {
+                let badge = cartLink.querySelector('.badge');
+                if (count > 0) {
+                    if (!badge) {
+                        badge = document.createElement('span');
+                        badge.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark';
+                        badge.style.fontSize = '10px';
+                        cartLink.appendChild(badge);
+                    }
+                    badge.textContent = count;
+                } else if (badge) {
+                    badge.remove();
+                }
+            }
         }
     </script>
 

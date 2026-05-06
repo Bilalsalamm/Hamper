@@ -278,8 +278,8 @@
         /* Product Grid */
         .products-container { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); 
-            gap: 28px; 
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); 
+            gap: 18px; 
             margin-bottom: 60px;
         }
         
@@ -319,7 +319,7 @@
         
         .card-img-container {
             position: relative;
-            height: 240px;
+            height: 160px;
             overflow: hidden;
             background: #f0f0f0;
         }
@@ -336,41 +336,41 @@
         }
         
         .card-content {
-            padding: 20px;
+            padding: 12px;
         }
         
         .product-name { 
-            font-size: 16px; 
+            font-size: 13px; 
             font-weight: 700; 
             color: #1a1a2e; 
-            margin-bottom: 10px; 
-            min-height: 45px;
-            line-height: 1.4;
+            margin-bottom: 6px; 
+            min-height: 32px;
+            line-height: 1.3;
         }
         
         .product-rating {
             color: #ffc107;
-            font-size: 13px;
-            margin-bottom: 8px;
+            font-size: 11px;
+            margin-bottom: 4px;
         }
         
         .product-price { 
-            font-size: 24px; 
+            font-size: 16px; 
             color: #667eea;
             font-weight: 800;
-            margin-bottom: 15px;
+            margin-bottom: 8px;
         }
         
         .btn-view { 
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white; 
             border: none; 
-            border-radius: 8px; 
-            padding: 10px 16px; 
+            border-radius: 6px; 
+            padding: 6px 10px; 
             width: 100%; 
-            font-weight: 700;
+            font-weight: 600;
             transition: all 0.3s;
-            font-size: 14px;
+            font-size: 11px;
         }
         
         .btn-view:hover { 
@@ -458,8 +458,8 @@
             }
             
             .products-container {
-                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-                gap: 16px;
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 12px;
             }
             
             .section-title {
@@ -471,6 +471,42 @@
                 gap: 15px;
             }
         }
+
+        /* Pagination Styling */
+        .pagination {
+            gap: 5px;
+        }
+
+        .page-link {
+            border: 1px solid #667eea;
+            color: #667eea;
+            font-weight: 600;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .page-link:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .page-item.active .page-link {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: #667eea;
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .page-item.disabled .page-link {
+            color: #ccc;
+            border-color: #ddd;
+            cursor: not-allowed;
+        }
+
 /* --- Updated Borderless KitKat Navbar --- */
 .navbar-custom { 
     background: #e61e2a  !important; /* The KitKat Red */
@@ -706,8 +742,10 @@
                 {% for hamper in hampers %}
                 <div class="hamper-card">
                     <div class="card-img-container">
-                        <img src="{% if hamper.image %}{{ hamper.image.url }}{% else %}https://via.placeholder.com/240x240?text=Premium+Hamper{% endif %}" 
-                             class="card-img-top" alt="{{ hamper.name }}" loading="lazy" decoding="async">
+                        <a href="{% url 'hamper_detail' hamper.pk %}" style="text-decoration: none; display: block; height: 100%;">
+                            <img src="{% if hamper.image %}{{ hamper.image.url }}{% else %}https://via.placeholder.com/240x240?text=Premium+Hamper{% endif %}" 
+                                 class="card-img-top" alt="{{ hamper.name }}" loading="lazy" decoding="async" style="cursor: pointer;">
+                        </a>
                     </div>
                     <div class="card-content">
                         <div class="product-rating">
@@ -720,11 +758,76 @@
                         </div>
                         <h6 class="product-name">{{ hamper.name }}</h6>
                         <p class="product-price">₹{{ hamper.price }}</p>
-                        <a href="{% url 'hamper_detail' hamper.pk %}" class="btn-view">View Details</a>
+                        <div style="display: flex; gap: 6px; margin-top: 8px;">
+                            <a href="{% url 'checkout' hamper.pk %}" class="btn-view" style="flex: 1; text-align: center; text-decoration: none; padding: 4px 0;">💳 BUY</a>
+                            <a href="{% url 'cart_add' hamper.pk %}" class="btn-view" style="flex: 1; text-align: center; text-decoration: none; padding: 4px 0;">🛒 CART</a>
+                        </div>
                     </div>
                 </div>
                 {% endfor %}
             </div>
+
+            <!-- Pagination Controls -->
+            {% if paginator.num_pages > 1 %}
+            <nav class="d-flex justify-content-center mt-5 mb-5" aria-label="Page navigation">
+                <ul class="pagination">
+                    {% if hampers.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1" aria-label="First">
+                                <span aria-hidden="true">&laquo;&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ hampers.previous_page_number }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">&laquo;&laquo;</span>
+                        </li>
+                        <li class="page-item disabled">
+                            <span class="page-link">&laquo;</span>
+                        </li>
+                    {% endif %}
+
+                    {% for num in paginator.page_range %}
+                        {% if hampers.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">
+                                    {{ num }}
+                                    <span class="visually-hidden">(current)</span>
+                                </span>
+                            </li>
+                        {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if hampers.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ hampers.next_page_number }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ paginator.num_pages }}" aria-label="Last">
+                                <span aria-hidden="true">&raquo;&raquo;</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">&raquo;</span>
+                        </li>
+                        <li class="page-item disabled">
+                            <span class="page-link">&raquo;&raquo;</span>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
         {% else %}
             <div class="alert alert-custom alert-info">
                 <i class="fas fa-info-circle"></i> No hampers available at the moment. Please check back soon!
@@ -815,5 +918,151 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Handle Add to Cart AJAX request
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Initializing Add to Cart buttons...');
+            const addToCartButtons = document.querySelectorAll('a[href*="/cart/add/"]');
+            console.log('Found', addToCartButtons.length, 'Add to Cart buttons');
+            
+            addToCartButtons.forEach((button, index) => {
+                console.log('Attaching click handler to button', index);
+                button.addEventListener('click', function(e) {
+                    console.log('Add to Cart button clicked');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const url = this.getAttribute('href');
+                    console.log('Fetching URL:', url);
+                    
+                    fetch(url, {
+                        method: 'GET',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => {
+                        console.log('Response status:', response.status);
+                        if (response.status === 401) {
+                            return response.json().then(data => {
+                                throw new Error('UNAUTHORIZED');
+                            });
+                        }
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok: ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Response data:', data);
+                        if (data.success) {
+                            updateCartCount(data.cart_count);
+                            showToastNotification(data.message);
+                        } else {
+                            showToastNotification('Error: ' + (data.message || 'Failed to add to cart'), 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        if (error.message === 'UNAUTHORIZED') {
+                            showToastNotification('Please login to add items to cart', 'error');
+                            setTimeout(() => {
+                                window.location.href = '/login/?next=' + window.location.pathname;
+                            }, 1500);
+                        } else {
+                            showToastNotification('Error adding to cart. Please try again.', 'error');
+                        }
+                    });
+                });
+            });
+        });
+        
+        function updateCartCount(count) {
+            console.log('Updating cart count to:', count);
+            let cartCountElement = document.querySelector('.cart-count');
+            
+            if (count > 0) {
+                if (!cartCountElement) {
+                    const cartIcon = document.querySelector('.cart-icon');
+                    if (cartIcon) {
+                        cartCountElement = document.createElement('span');
+                        cartCountElement.className = 'cart-count';
+                        cartIcon.appendChild(cartCountElement);
+                    }
+                }
+                if (cartCountElement) {
+                    cartCountElement.textContent = count;
+                    console.log('Cart count updated to:', count);
+                }
+            } else if (cartCountElement) {
+                cartCountElement.remove();
+                console.log('Cart count badge removed');
+            }
+        }
+        
+        function showToastNotification(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = 'toast-notification';
+            toast.textContent = (type === 'error' ? '✗ ' : '✓ ') + message;
+            
+            const bgColor = type === 'error' 
+                ? 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)'
+                : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 30px;
+                right: 30px;
+                background: ${bgColor};
+                color: white;
+                padding: 15px 25px;
+                border-radius: 8px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+                z-index: 9999;
+                font-weight: 600;
+                animation: slideIn 0.3s ease;
+                max-width: 400px;
+            `;
+            
+            if (!document.getElementById('toast-styles')) {
+                const style = document.createElement('style');
+                style.id = 'toast-styles';
+                style.textContent = `
+                    @keyframes slideIn {
+                        from {
+                            transform: translateX(400px);
+                            opacity: 0;
+                        }
+                        to {
+                            transform: translateX(0);
+                            opacity: 1;
+                        }
+                    }
+                    @keyframes slideOut {
+                        from {
+                            transform: translateX(0);
+                            opacity: 1;
+                        }
+                        to {
+                            transform: translateX(400px);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3000);
+        }
+    </script>
 </body>
 </html>

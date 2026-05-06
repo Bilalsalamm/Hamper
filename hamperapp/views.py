@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
 from django.views.decorators.cache import cache_control
+from django.core.paginator import Paginator
 from .cart import Cart
 from django import forms
 from django.contrib.auth.models import User
@@ -25,10 +26,20 @@ import random
 
 @cache_control(no_cache=True, no_store=True, must_revalidate=True)
 def hamper_list(request):
-    hampers = Hamper.objects.all()
+    all_hampers = Hamper.objects.all()
+    
+    # Pagination: 10 items per page
+    paginator = Paginator(all_hampers, 10)
+    page_number = request.GET.get('page')
+    hampers = paginator.get_page(page_number)
+    
     cart = Cart(request)
     cart_items_count = cart.get_total_items()
-    return render(request, 'list.html', {'hampers': hampers, 'cart_items_count': cart_items_count})
+    return render(request, 'list.html', {
+        'hampers': hampers, 
+        'cart_items_count': cart_items_count,
+        'paginator': paginator
+    })
 
 @cache_control(no_cache=True, no_store=True, must_revalidate=True)
 def hamper_detail(request, pk):
@@ -458,6 +469,13 @@ def checkout(request, pk):
     """Checkout for a single hamper from product page"""
     hamper = Hamper.objects.get(pk=pk)
     
+    # Get quantity from request (query parameter or POST)
+    quantity = request.POST.get('quantity') or request.GET.get('quantity', 1)
+    quantity = int(quantity) if str(quantity).isdigit() and int(quantity) > 0 else 1
+    
+    # Calculate total price for quantity
+    total_price = hamper.price * quantity
+    
     if request.method == 'POST':
         full_name = request.POST.get('full_name')
         email = request.POST.get('email')
@@ -510,18 +528,18 @@ ITEM DETAILS
 
 Product: {hamper.name}
 Price: ₹{hamper.price}
-Quantity: 1
-Subtotal: ₹{hamper.price}
+Quantity: {quantity}
+Subtotal: ₹{total_price}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 PRICE SUMMARY
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Subtotal: ₹{hamper.price}
+Subtotal: ₹{total_price}
 Shipping: FREE
 Tax: ₹0.00
 ────────────────────
-TOTAL: ₹{hamper.price}
+TOTAL: ₹{total_price}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 DELIVERY INFORMATION
@@ -557,7 +575,7 @@ HamperWorld Team
                 print(f"Email error: {e}")
             
             # Store total in session for success page
-            request.session['order_total'] = float(hamper.price)
+            request.session['order_total'] = float(total_price)
             request.session.modified = True
             
             return redirect('checkout_success', pk=order.id)
@@ -571,6 +589,8 @@ HamperWorld Team
     cart = Cart(request)
     return render(request, 'checkout.html', {
         'hamper': hamper,
+        'quantity': quantity,
+        'total_price': total_price,
         'cart_items_count': cart.get_total_items(),
         'countries': json.dumps(countries_list),
     })
@@ -779,9 +799,37 @@ def checkout_success(request, pk):
 
 @cache_control(no_cache=True, no_store=True, must_revalidate=True)
 def cart_add(request, pk):
+    from django.http import JsonResponse
+    
+    # Check if user is authenticated
+    if not request.user.is_authenticated:
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': False,
+                'message': 'Please login to add items to cart',
+                'redirect': request.build_absolute_uri('/login/?next=' + request.path)
+            }, status=401)
+        else:
+            return redirect(f'/login/?next={request.path}')
+    
     cart = Cart(request)
     hamper = get_object_or_404(Hamper, id=pk)
-    cart.add(hamper=hamper)
+    
+    # Get quantity from request (either from AJAX data or query parameter)
+    quantity_str = str(request.GET.get('quantity', '1'))
+    quantity = int(quantity_str) if quantity_str.isdigit() and int(quantity_str) > 0 else 1
+    
+    cart.add(hamper=hamper, quantity=quantity)
+    
+    # If AJAX request, return JSON response
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({
+            'success': True,
+            'message': f'{hamper.name} added to cart!',
+            'cart_count': cart.get_total_items()
+        })
+    
+    # Otherwise, redirect (for non-AJAX requests)
     return redirect('cart_summary')
 
 @cache_control(no_cache=True, no_store=True, must_revalidate=True)

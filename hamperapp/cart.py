@@ -7,18 +7,19 @@ class Cart:
             cart = self.session['cart'] = {}
         self.cart = cart
 
-    def add(self, hamper):
+    def add(self, hamper, quantity=1):
         hamper_id = str(hamper.id)
+        quantity = int(quantity)
         if hamper_id not in self.cart:
             self.cart[hamper_id] = {
                 'name': hamper.name,
                 'price': str(hamper.price),
-                'quantity': 1,
+                'quantity': quantity,
                 'image': hamper.image.url if hamper.image else '',
                 'description': hamper.description[:100]  # Store first 100 chars
             }
         else:
-            self.cart[hamper_id]['quantity'] += 1
+            self.cart[hamper_id]['quantity'] += quantity
         self.session.modified = True
 
     def update_quantity(self, hamper_id, quantity):
