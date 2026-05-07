@@ -774,12 +774,20 @@ HamperWorld Team
     for hamper_id, item in cart.cart.items():
         price = float(item['price'])
         qty = item['quantity']
+        # Fetch hamper object to get image
+        try:
+            hamper = Hamper.objects.get(id=hamper_id)
+            image_url = hamper.image.url if hamper.image else None
+        except Hamper.DoesNotExist:
+            image_url = None
+        
         cart_items.append({
             'id': hamper_id,
             'name': item['name'],
             'price': price,
             'quantity': qty,
-            'total': price * qty
+            'total': price * qty,
+            'image_url': image_url
         })
         total += price * qty
     

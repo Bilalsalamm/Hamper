@@ -10,23 +10,25 @@
     
     <style>
         :root {
-            --brand-red: #d1121d;
+            --brand-purple: #667eea;
+            --brand-dark: #764ba2;
             --bg-neutral: #f9fafb;
-            --text-heading: #111827;
-            --text-body: #4b5563;
-            --border-color: #e5e7eb;
+            --text-heading: #2d3561;
+            --text-body: #ffffff;
+            --border-color: #e8e8f0;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-neutral);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             color: var(--text-body);
         }
 
         /* --- Navbar --- */
         .navbar-pro {
-            background: #ffffff;
-            border-bottom: 2px solid var(--brand-red);
+            background: linear-gradient(90deg, #2d3561 0%, #667eea 100%);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             padding: 1rem 0;
             position: sticky;
             top: 0;
@@ -37,13 +39,13 @@
             font-family: 'Oswald', sans-serif;
             font-weight: 700;
             font-size: 22px;
-            color: var(--text-heading);
+            color: white;
             text-decoration: none;
             letter-spacing: 1px;
             text-transform: uppercase;
         }
 
-        .navbar-brand-text span { color: var(--brand-red); }
+        .navbar-brand-text span { color: #a78bfa; }
 
         /* --- Layout --- */
         .checkout-wrapper {
@@ -53,10 +55,12 @@
         }
 
         .checkout-main {
-            background: #ffffff;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
             padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
         }
 
         .section-title {
@@ -71,24 +75,181 @@
             gap: 12px;
         }
 
-        .section-title i { color: var(--brand-red); }
+        .section-title i { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
         /* --- Form --- */
-        .form-label { font-size: 0.85rem; font-weight: 600; color: var(--text-heading); margin-bottom: 6px; }
-        .form-control, .form-select { border: 1px solid var(--border-color); padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.95rem; }
-        .form-control:focus, .form-select:focus { border-color: var(--brand-red); box-shadow: 0 0 0 4px rgba(209, 18, 29, 0.1); outline: none; }
-        .required-mark { color: var(--brand-red); margin-left: 2px; }
+        .form-label { font-size: 0.85rem; font-weight: 700; color: var(--text-heading); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-control, .form-select { border: 2px solid var(--border-color); padding: 0.75rem 1rem; border-radius: 12px; font-size: 0.95rem; background: #f8f9fc; font-weight: 500; transition: all 0.3s ease; }
+        .form-control:focus, .form-select:focus { border-color: var(--brand-purple); background: white; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); outline: none; }
+        .required-mark { color: #e6294a; margin-left: 2px; font-weight: 700; }
 
         /* --- Summary --- */
-        .summary-card { background: #ffffff; border: 1px solid var(--border-color); border-radius: 8px; padding: 24px; position: sticky; top: 100px; }
-        .item-row-sm { padding: 12px 0; border-bottom: 1px dashed var(--border-color); }
-        .item-name-sm { font-weight: 600; font-size: 0.9rem; color: var(--text-heading); }
-        .item-price-sm { font-weight: 700; color: var(--brand-red); }
-        .total-row { margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--text-heading); display: flex; justify-content: space-between; align-items: center; }
-        .total-amount { font-size: 1.5rem; font-weight: 800; color: var(--text-heading); }
+        .summary-card { 
+            background: rgba(255, 255, 255, 0.98);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px; 
+            padding: 35px; 
+            position: sticky; 
+            top: 120px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        .item-row-sm { padding: 15px 0; border-bottom: 1px dashed var(--border-color); }
+        .item-name-sm { font-weight: 800; font-size: 0.95rem; color: var(--text-heading); }
+        .item-price-sm { 
+            font-weight: 800; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .total-row { margin-top: 20px; padding-top: 20px; border-top: 2px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; }
+        .total-amount { 
+            font-size: 1.8rem; 
+            font-weight: 900; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-        .btn-submit-pro { background-color: var(--brand-red); color: #ffffff; border: none; width: 100%; padding: 1rem; border-radius: 6px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 1.5rem; transition: 0.3s; }
-        .btn-submit-pro:hover { background-color: #b11019; transform: translateY(-2px); }
+        .btn-submit-pro { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            color: #ffffff; 
+            border: none; 
+            width: 100%; 
+            padding: 1rem; 
+            border-radius: 12px; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            margin-top: 1.5rem; 
+            transition: 0.3s; 
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        .btn-submit-pro:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+
+        /* Reorder layout - summary on top */
+        .checkout-wrapper .row {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .checkout-wrapper .col-lg-5 {
+            order: -1;
+        }
+
+        @media (max-width: 992px) {
+            .checkout-wrapper .row {
+                flex-direction: column;
+            }
+            .checkout-wrapper .col-lg-5 {
+                order: -1;
+            }
+        }
+
+        /* Product Card Styling */
+        .product-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 18px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-name {
+            color: var(--text-heading);
+            font-weight: 800;
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+
+        .product-qty {
+            color: #666;
+            font-size: 13px;
+            margin: 8px 0;
+            font-weight: 600;
+        }
+
+        .product-price {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 900;
+            font-size: 20px;
+            margin: 0;
+        }
+
+        .summary-divider {
+            border-top: 1px solid #f0f0f0;
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            font-size: 13px;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .summary-row.total {
+            font-weight: 800;
+            font-size: 16px;
+            color: var(--text-heading);
+            border-top: 2px solid #f0f0f0;
+            padding-top: 14px;
+            margin-top: 14px;
+        }
+
+        .summary-row span:last-child {
+            font-weight: 700;
+            color: #333;
+        }
+
+        .summary-row.total span:last-child {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 20px;
+        }
+
+        .summary-row.shipping .status {
+            color: #10b981;
+            font-weight: 800;
+            background: #ecfdf5;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+        }
     </style>
 </head>
 <body>
@@ -101,7 +262,7 @@
             </div>
         </div>
     </nav>
-
+    
     <div class="checkout-wrapper">
         <div class="row g-4">
             <div class="col-lg-7">
@@ -117,25 +278,27 @@
                                 <input type="text" class="form-control" name="full_name" value="{{ user.get_full_name }}" placeholder="Recipient's Name" required>
                             </div>
                             <div class="col-md-5">
-                                <label class="form-label">Phone Number<span class="required-mark">*</span></label>
-                                <input type="tel" class="form-control" name="phone" placeholder="+91 00000 00000" required>
+                                <label class="form-label">(+91) Phone Number <span class="required-mark">*</span></label>
+                                <input type="tel" class="form-control" name="phone" placeholder="98989 11111" maxlength="10" required>
                             </div>
                         </div>
 
                         <hr class="my-4" style="opacity: 0.1;">
-
+                        
                         <div class="row g-3 mb-4">
                             <div class="col-md-6">
                                 <label class="form-label">Country<span class="required-mark">*</span></label>
-                                <select class="form-select" id="country" name="country" required>
-                                    <option value="IN" selected>India</option>
-                                </select>
+                                <div style="background: #f8f9fc; border: 2px solid var(--border-color); border-radius: 12px; padding: 0.75rem 1rem; color: var(--text-heading); font-weight: 700; font-size: 0.95rem;">
+                                    <i class="fas fa-check-circle" style="color: #10b981; margin-right: 8px;"></i>India
+                                </div>
+                                <input type="hidden" id="country" name="country" value="IN">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">State / Union Territory<span class="required-mark">*</span></label>
-                                <select class="form-select" id="state" name="state" required onchange="updateCities()">
-                                    <option value="">Select State</option>
-                                </select>
+                                <div style="background: #f8f9fc; border: 2px solid var(--border-color); border-radius: 12px; padding: 0.75rem 1rem; color: var(--text-heading); font-weight: 700; font-size: 0.95rem;">
+                                    <i class="fas fa-check-circle" style="color: #10b981; margin-right: 8px;"></i>Kerala
+                                </div>
+                                <input type="hidden" id="state" name="state" value="Kerala">
                             </div>
                         </div>
 
@@ -144,6 +307,21 @@
                                 <label class="form-label">City<span class="required-mark">*</span></label>
                                 <select class="form-select" id="city" name="city" required>
                                     <option value="">Select City</option>
+                                    <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+                                    <option value="Kochi">Kochi</option>
+                                    <option value="Kozhikode">Kozhikode</option>
+                                    <option value="Kollam">Kollam</option>
+                                    <option value="Thrissur">Thrissur</option>
+                                    <option value="Kottayam">Kottayam</option>
+                                    <option value="Ernakulam">Ernakulam</option>
+                                    <option value="Pathanamthitta">Pathanamthitta</option>
+                                    <option value="Kannur">Kannur</option>
+                                    <option value="Kasaragod">Kasaragod</option>
+                                    <option value="Malappuram">Malappuram</option>
+                                    <option value="Wayanad">Wayanad</option>
+                                    <option value="Idukki">Idukki</option>
+                                    <option value="Palakkad">Palakkad</option>
+                                    <option value="Alappuzha">Alappuzha</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
@@ -160,25 +338,52 @@
                         <!-- UPI Payment Section -->
                         <hr class="my-4" style="opacity: 0.1;">
                         <h2 class="section-title"><i class="fa-solid fa-qrcode"></i> Payment Method</h2>
-                        
                         <div class="row g-3 mb-4">
                             <div class="col-md-6">
-                                <div style="border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; text-align: center; background: #f9fafb;">
-                                    <p style="margin-bottom: 10px; font-weight: 600; color: var(--text-heading);">UPI Payment</p>
-                                    <img src="/static/images/upi_qr.png" alt="UPI QR Code" style="max-width: 100%; height: auto; border-radius: 6px; margin-bottom: 10px;">
-                                    <p style="font-size: 12px; color: var(--text-body); margin: 0;">UPI ID: <strong>bmsalam@upi</strong></p>
+                                <div style="border: 2px solid var(--border-color); border-radius: 12px; padding: 18px; text-align: center; background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);">
+                                    <p style="margin-bottom: 12px; font-weight: 700; color: var(--text-heading); font-size: 0.95rem;">UPI Payment</p>
+                                    <img src="/static/images/upi.png" alt="UPI QR Code" style="max-width: 100%; height: auto; border-radius: 10px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+                                    <p style="font-size: 13px; color: var(--text-body); margin: 0; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                        UPI ID: 
+                                        <strong id="upi-id" style="color: var(--text-heading); font-size: 0.95rem;">bilalsalam65@oksbi</strong>
+                                        <button type="button" onclick="copyUPI()" class="btn btn-sm p-0 border-0" title="Copy UPI ID" style="background: none; color: #667eea; cursor: pointer;">
+                                            <i class="fa-regular fa-copy" id="copy-icon"></i>
+                                        </button>
+                                    </p>
+                                    <span id="copy-status" style="font-size: 10px; color: #10b981; display: none; font-weight: 700;">Copied!</span>
+                                    <div class="mt-4 p-4 text-center" style="background: white; border: 2px solid #e8e8f0; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                                        <p style="font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px;">
+                                            Total Amount to Pay
+                                        </p>
+                                        <h2 style="font-size: 32px; font-weight: 900; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 0;">
+                                            ₹{{ total|floatformat:2 }}
+                                        </h2>
+                                        <div class="mt-2 d-flex align-items-center justify-content-center gap-2" style="color: #10b981; font-size: 13px; font-weight: 600;">
+                                            <i class="fa-solid fa-circle-check"></i>
+                                            <span>Scan QR or use UPI ID above</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <p style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">📤 Upload Payment Proof</p>
-                                <label class="form-label">Transaction Screenshot (Optional)</label>
-                                <input type="file" class="form-control" name="payment_screenshot" accept="image/png,image/jpeg,image/jpg" style="padding: 0.75rem 1rem;">
-                                <small class="text-muted d-block mt-2">JPG, PNG, JPEG (Max 5MB)</small>
+                                    <p style="font-size: 14px; font-weight: 700; margin-bottom: 12px; color: var(--text-heading);">📤 Upload Payment Proof</p>
+                                    <label class="form-label required-field">Transaction Screenshot</label>
+                                    
+                                    <input type="file" id="payment_screenshot" class="form-control" name="payment_screenshot" 
+                                        accept="image/png,image/jpeg,image/jpg" style="padding: 0.75rem 1rem;" required>
+                                        
+                                    <small class="text-muted d-block mt-2">JPG, PNG, JPEG (Max 5MB)</small>
+                                </div>
+                                <!-- Preview Section -->
+                                <div id="preview-container" style="display: none; margin-top: 15px; border: 2px solid var(--border-color); border-radius: 12px; padding: 15px; background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);">
+                                    <p style="font-size: 13px; font-weight: 700; color: var(--text-heading); margin-bottom: 12px;">📸 Preview:</p>
+                                    <img id="preview-image" src="" alt="Payment Screenshot Preview" style="max-width: 100%; height: auto; border-radius: 10px; max-height: 300px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+                                </div>
                             </div>
                         </div>
 
                         <button type="submit" class="btn-submit-pro">
-                            <i class="fa-solid fa-lock me-2"></i> Confirm and Pay ₹{{ total }}
+                            <i class="fa-solid fa-lock me-2"></i>  Pay ₹{{ total }} and Submit
                         </button>
                     </form>
                 </div>
@@ -188,37 +393,38 @@
                 <div class="summary-card">
                     <h3 class="section-title" style="margin-bottom: 1.5rem;"><i class="fa-solid fa-receipt"></i> Order Summary</h3>
                     
-                    <div class="order-items-list mb-4">
-                        {% for item in cart_items %}
-                        <div class="item-row-sm d-flex justify-content-between align-items-center">
-                            <div>
-                                <div class="item-name-sm">{{ item.name }}</div>
-                                <div class="small text-muted">Quantity: {{ item.quantity }}</div>
-                            </div>
-                            <div class="item-price-sm">₹{{ item.total|floatformat:2 }}</div>
+                    {% for item in cart_items %}
+                    <div class="product-card">
+                        <img src="{% if item.image_url %}{{ item.image_url }}{% else %}https://via.placeholder.com/300x200{% endif %}"
+                             class="product-image" loading="lazy" decoding="async" alt="{{ item.name }}">
+                        <div class="product-name">{{ item.name }}</div>
+                        <div class="product-qty">Qty: <strong>{{ item.quantity }}</strong></div>
+                        <div class="product-price">₹{{ item.price }} each</div>
+                    </div>
+                    {% endfor %}
+
+                    <div class="summary-divider">
+                        <div class="summary-row">
+                            <span>Subtotal</span>
+                            <span>₹{{ total|floatformat:2 }}</span>
                         </div>
-                        {% endfor %}
+                        <div class="summary-row shipping">
+                            <span>Shipping</span>
+                            <span class="status">FREE</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Tax</span>
+                            <span>₹0.00</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total Amount</span>
+                            <span>₹{{ total|floatformat:2 }}</span>
+                        </div>
                     </div>
 
-                    <div class="pricing-details small">
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="text-muted">Subtotal</span>
-                            <span class="fw-bold">₹{{ total|floatformat:2 }}</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="text-muted">Shipping</span>
-                            <span class="text-success fw-bold">FREE</span>
-                        </div>
-                    </div>
-
-                    <div class="total-row">
-                        <span class="fw-bold text-dark">Order Total</span>
-                        <span class="total-amount">₹{{ total|floatformat:2 }}</span>
-                    </div>
-
-                    <div class="mt-4 p-3 rounded" style="background: #f8fafc; border: 1px solid var(--border-color);">
-                        <p class="mb-0 x-small text-muted" style="font-size: 11px;">
-                            <i class="fa-solid fa-shield-halved text-success me-1"></i> 
+                    <div class="mt-4 p-3 rounded" style="background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%); border: 2px solid var(--border-color);">
+                        <p class="mb-0 x-small text-muted" style="font-size: 11px; font-weight: 700; color: var(--text-heading);">
+                            <i class="fa-solid fa-shield-halved" style="color: #10b981; margin-right: 8px;"></i> 
                             Secure Indian Gateway Payment. GST Invoicing available.
                         </p>
                     </div>
@@ -228,47 +434,17 @@
     </div>
 
     <script>
-        const indiaData = {
-            "Kerala": ["Thiruvananthapuram", "Kochi", "Kozhikode", "Kollam", "Thrissur", "Kottayam"],
-            "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Salem", "Trichy"],
-            "Karnataka": ["Bangalore", "Mysore", "Mangalore", "Hubli", "Belgaum"],
-            "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Nashik", "Aurangabad"],
-            "Delhi": ["New Delhi", "North Delhi", "South Delhi", "East Delhi", "West Delhi"],
-            "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot"],
-            "West Bengal": ["Kolkata", "Howrah", "Durgapur", "Siliguri"],
-            "Telangana": ["Hyderabad", "Warangal", "Nizamabad"],
-            "Uttar Pradesh": ["Lucknow", "Kanpur", "Varanasi", "Agra", "Noida"],
-            "Rajasthan": ["Jaipur", "Jodhpur", "Udaipur", "Kota"],
-            "Punjab": ["Ludhiana", "Amritsar", "Jalandhar", "Patiala"],
-            "Haryana": ["Gurgaon", "Faridabad", "Panipat", "Ambala"]
-        };
-
-        const stateSelect = document.getElementById('state');
-        const citySelect = document.getElementById('city');
-
-        // Populate States on Load
+        // Pre-populated state and city for Kerala only
         document.addEventListener('DOMContentLoaded', () => {
-            for (let state in indiaData) {
-                let opt = new Option(state, state);
-                stateSelect.add(opt);
-            }
+            document.getElementById('country').value = 'IN';
+            document.getElementById('state').value = 'Kerala';
         });
-
-        function updateCities() {
-            let selectedState = stateSelect.value;
-            citySelect.innerHTML = '<option value="">Select City</option>';
-            
-            if (selectedState && indiaData[selectedState]) {
-                indiaData[selectedState].forEach(city => {
-                    let opt = new Option(city, city);
-                    citySelect.add(opt);
-                });
-            }
-        }
 
         // Enhanced file upload with drag & drop and validation
         document.addEventListener('DOMContentLoaded', function() {
-            const fileInput = document.querySelector('input[name="payment_screenshot"]');
+            const fileInput = document.querySelector('#payment_screenshot');
+            const previewContainer = document.querySelector('#preview-container');
+            const previewImage = document.querySelector('#preview-image');
             
             if (fileInput) {
                 // Validate and update on file selection
@@ -279,23 +455,53 @@
                         if (!file.type.startsWith('image/')) {
                             alert('Please upload an image file (JPG, PNG, JPEG)');
                             fileInput.value = '';
+                            previewContainer.style.display = 'none';
                             return;
                         }
                         // Validate file size (5MB = 5242880 bytes)
                         if (file.size > 5242880) {
                             alert('File size must be less than 5MB. Your file is ' + (file.size / 1024 / 1024).toFixed(2) + 'MB');
                             fileInput.value = '';
+                            previewContainer.style.display = 'none';
                             return;
                         }
-                        // Show file name  
-                        const label = fileInput.parentElement;
-                        if (label) {
-                            label.innerHTML = '<i class="fa-solid fa-check-circle" style="color: #27ae60;"></i> ' + file.name + ' (' + (file.size / 1024).toFixed(2) + ' KB)';
-                        }
+                        // Show preview image
+                        const reader = new FileReader();
+                        reader.onload = function(event) {
+                            previewImage.src = event.target.result;
+                            previewContainer.style.display = 'block';
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        previewContainer.style.display = 'none';
                     }
                 });
             }
         });
+
+function copyUPI() {
+    // Select the text
+    const upiText = document.getElementById('upi-id').innerText;
+    const status = document.getElementById('copy-status');
+    const icon = document.getElementById('copy-icon');
+
+    // Copy to clipboard
+    navigator.clipboard.writeText(upiText).then(() => {
+        // Change icon to a checkmark
+        icon.classList.replace('fa-regular', 'fa-solid');
+        icon.classList.replace('fa-copy', 'fa-check-double');
+        status.style.display = 'inline-block';
+
+        // Reset after 2 seconds
+        setTimeout(() => {
+            icon.classList.replace('fa-solid', 'fa-regular');
+            icon.classList.replace('fa-check-double', 'fa-copy');
+            status.style.display = 'none';
+        }, 500);
+    }).catch(err => {
+        console.error('Failed to copy: ', err);
+    });
+}
     </script>
 </body>
 </html>
